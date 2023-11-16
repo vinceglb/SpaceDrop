@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.skie)
 }
 
 kotlin {
@@ -18,16 +19,21 @@ kotlin {
     androidTarget {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "1.8"
+                jvmTarget = "11"
             }
         }
     }
     
     jvm()
+    jvmToolchain(11)
     
     sourceSets {
         commonMain.dependencies {
-            // put your Multiplatform dependencies here
+            // Skie
+            implementation(libs.skie.annotations)
+
+            // Koin
+            implementation(libs.koin.core)
         }
     }
 }
