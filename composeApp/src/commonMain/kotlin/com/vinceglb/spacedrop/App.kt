@@ -1,3 +1,5 @@
+package com.vinceglb.spacedrop
+
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -23,7 +25,7 @@ fun App() {
         var showImage by remember { mutableStateOf(false) }
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
             Button(onClick = {
-                greetingText = "Compose: ${Greeting().greet()}"
+                greetingText = "Salut"
                 showImage = !showImage
             }) {
                 Text(greetingText)

@@ -1,5 +1,4 @@
 import SwiftUI
-import Shared
 
 struct ContentView: View {
     var body: some View {
@@ -7,7 +6,7 @@ struct ContentView: View {
             Image(systemName: "swift")
                 .imageScale(.large)
                 .foregroundColor(.accentColor)
-            Text("SwiftUI: \(Greeting().greet())")
+            Text("SwiftUI")
         }
         .padding()
     }
