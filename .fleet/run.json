@@ -1,0 +1,26 @@
+{
+    "configurations": [
+        {
+            "type": "gradle",
+            "name": "Desktop App",
+            "tasks": ["run"],
+        },
+        {
+            "type": "xcode-app",
+            "name": "iOS App",
+            "buildTarget": {
+                "project": "iosApp",
+                "target": "iosApp",
+            },
+            "configuration": "Debug",
+            "destination": "iPhone 15 | iOS 17.0",
+        },
+        {
+            "type": "android-app",
+            "name": "Android App",
+            "module": "SpaceDrop.composeApp.main",
+            "destination": "Pixel 7 API 34",
+        },
+        
+    ]
+}
