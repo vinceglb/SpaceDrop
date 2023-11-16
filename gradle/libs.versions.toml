@@ -17,7 +17,7 @@ koin = "3.5.0"
 koin-androidx-compose = "3.5.0"
 koin-compose = "1.1.0"
 kotlin = "1.9.20"
-skie = "0.5.3"
+skie = "0.5.5"
 
 [libraries]
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidx-appcompat" }
