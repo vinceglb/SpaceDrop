@@ -1,8 +1,9 @@
 [versions]
+kotlin = "1.9.20"
 compose = "1.5.4"
 compose-compiler = "1.5.4"
 compose-plugin = "1.5.10"
-agp = "8.1.3"
+agp = "8.1.4"
 android-minSdk = "24"
 android-compileSdk = "34"
 android-targetSdk = "34"
@@ -16,8 +17,10 @@ junit = "4.13.2"
 koin = "3.5.0"
 koin-androidx-compose = "3.5.0"
 koin-compose = "1.1.0"
-kotlin = "1.9.20"
+kotlinx-coroutines = "1.7.3"
+kmmViewmodel = "1.0.0-ALPHA-15"
 skie = "0.5.5"
+voyager = "1.0.0-rc10"
 
 [libraries]
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidx-appcompat" }
@@ -37,7 +40,12 @@ koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin-com
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
+kmm-viewmodel = { module = "com.rickclephas.kmm:kmm-viewmodel-core", version.ref = "kmmViewmodel" }
 skie-annotations = { module = "co.touchlab.skie:configuration-annotations", version.ref = "skie" }
+voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
+voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
 
 [plugins]
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }

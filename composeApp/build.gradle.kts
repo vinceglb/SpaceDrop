@@ -34,6 +34,10 @@ kotlin {
 
             // Koin
             implementation(libs.koin.compose)
+
+            // Voyager
+            implementation(libs.voyager.navigator)
+            implementation(libs.voyager.koin)
         }
         
         androidMain.dependencies {

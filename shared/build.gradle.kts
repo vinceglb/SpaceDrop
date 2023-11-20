@@ -29,11 +29,28 @@ kotlin {
     
     sourceSets {
         commonMain.dependencies {
+            // Kotlin
+            implementation(libs.kotlinx.coroutines.core)
+
             // Skie
             implementation(libs.skie.annotations)
 
             // Koin
             implementation(libs.koin.core)
+        }
+
+        jvmMain.dependencies {
+            // Kotlin Coroutines
+            runtimeOnly(libs.kotlinx.coroutines.swing)
+        }
+
+        iosMain.dependencies {
+            // KMM ViewModel
+            api(libs.kmm.viewmodel)
+        }
+
+        all {
+            languageSettings.optIn("kotlinx.cinterop.ExperimentalForeignApi")
         }
     }
 }
