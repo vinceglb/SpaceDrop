@@ -74,7 +74,9 @@ kotlin {
             implementation(libs.slf4j.simple)
         }
 
-        all {}
+        all {
+            languageSettings.optIn("kotlinx.cinterop.ExperimentalForeignApi")
+        }
     }
 }
 
