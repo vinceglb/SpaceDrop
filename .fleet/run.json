@@ -7,10 +7,20 @@
         },
         {
             "type": "xcode-app",
-            "name": "iOS App",
+            "name": "iOS Swift App",
             "buildTarget": {
                 "project": "iosApp",
                 "target": "iosApp",
+            },
+            "configuration": "Debug",
+            "destination": "iPhone 15 | iOS 17.0",
+        },
+        {
+            "type": "xcode-app",
+            "name": "iOS Compose App",
+            "buildTarget": {
+                "project": "iosApp",
+                "target": "iosComposeApp",
             },
             "configuration": "Debug",
             "destination": "iPhone 15 | iOS 17.0",

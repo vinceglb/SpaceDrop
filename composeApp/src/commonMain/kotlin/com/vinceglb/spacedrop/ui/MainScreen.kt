@@ -14,6 +14,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import com.vinceglb.spacedrop.data.repository.AuthRepository
 import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.compose.auth.composable.rememberSignInWithApple
 import io.github.jan.supabase.compose.auth.composable.rememberSignInWithGoogle
 import io.github.jan.supabase.compose.auth.composeAuth
 import io.github.jan.supabase.gotrue.auth
@@ -64,7 +65,12 @@ class HomeScreen : Screen {
         val authRepository = koinInject<AuthRepository>()
         val currentUser by authRepository.currentUser.collectAsState(initial = null)
         val coroutineScope = rememberCoroutineScope()
-        val action = client.composeAuth.rememberSignInWithGoogle()
+        val action = client.composeAuth.rememberSignInWithGoogle(onResult = {
+            println("Google $it")
+        })
+//        val action2 = client.composeAuth.rememberSignInWithApple(onResult = {
+//            println("Apple $it")
+//        })
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
@@ -75,8 +81,13 @@ class HomeScreen : Screen {
                 targetState = currentUser
             ) { user ->
                 when (user) {
-                    null -> Button(onClick = { action.startFlow() }) {
-                        Text("Google Login")
+                    null -> Column {
+                        Button(onClick = { action.startFlow() }) {
+                            Text("Google Login")
+                        }
+//                        Button(onClick = { action2.startFlow() }) {
+//                            Text("Apple login")
+//                        }
                     }
 
                     else -> Button(onClick = { coroutineScope.launch { client.auth.signOut() } }) {

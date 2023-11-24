@@ -18,6 +18,13 @@ struct iOSComposeApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .onOpenURL(perform: handleDeepLink)
+        }
+    }
+
+    func handleDeepLink(_ url: URL) {
+        if url.scheme == "login" {
+            SupabaseUtil.shared.handleDeeplinks(url: url)
         }
     }
 }

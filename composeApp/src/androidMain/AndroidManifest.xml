@@ -28,8 +28,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="login"
-                    android:scheme="com.vinceglb.spacedrop" />
+                    android:host="com.vinceglb.spacedrop"
+                    android:scheme="login" />
             </intent-filter>
         </activity>
     </application>
