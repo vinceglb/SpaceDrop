@@ -1,7 +1,11 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.skie)
+    alias(libs.plugins.buildKonfig)
 }
 
 kotlin {
@@ -37,21 +41,40 @@ kotlin {
 
             // Koin
             implementation(libs.koin.core)
+
+            // Supabase
+            api(libs.supabase.auth)
+            api(libs.supabase.gotrue)
         }
 
         jvmMain.dependencies {
             // Kotlin Coroutines
             runtimeOnly(libs.kotlinx.coroutines.swing)
+
+            // Ktor
+            implementation(libs.ktor.client.cio)
+
+            // Logger for debugging Supabase Auth
+            implementation(libs.slf4j.simple)
         }
 
-        iosMain.dependencies {
+        appleMain.dependencies {
             // KMM ViewModel
             api(libs.kmm.viewmodel)
+
+            // Ktor
+            implementation(libs.ktor.client.darwin)
         }
 
-        all {
-            languageSettings.optIn("kotlinx.cinterop.ExperimentalForeignApi")
+        androidMain.dependencies {
+            // Ktor
+            implementation(libs.ktor.client.okhttp)
+
+            // Logger for debugging Supabase Auth
+            implementation(libs.slf4j.simple)
         }
+
+        all {}
     }
 }
 
@@ -60,5 +83,23 @@ android {
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
+    }
+}
+
+buildkonfig {
+    packageName = "com.vinceglb.spacedrop.shared"
+    objectName = "SupabaseKeyConfig"
+
+    defaultConfigs {
+        buildConfigField(
+            STRING,
+            "SupabaseUrl",
+            gradleLocalProperties(project.rootDir).getProperty("SUPABASE_URL")
+        )
+        buildConfigField(
+            STRING,
+            "SupabaseKey",
+            gradleLocalProperties(project.rootDir).getProperty("SUPABASE_KEY")
+        )
     }
 }

@@ -8,33 +8,29 @@ struct ContentView: View {
     var state: String = ""
 
     var body: some View {
-
-        VStack {
-            Image(systemName: "swift")
-                    .imageScale(.large)
-                    .foregroundColor(.accentColor)
-            Text("SwiftUI \(state)")
-            NavigationLink("salut") {
-                ViewTest()
+        NavigationView {
+            VStack {
+                Image(systemName: "swift")
+                        .imageScale(.large)
+                        .foregroundColor(.accentColor)
+                Text("SwiftUI \(state)")
+                NavigationLink("salut plop") {
+                    ViewTest2()
+                }
             }
+                    .padding()
         }
-                .padding()
                 .task {
                     for await s in viewModel.state {
                         state = s
                     }
                 }
-                .onAppear {
-                    print("appear")
-                }
-                .onDisappear {
-                    print("disappear")
-                }
+
     }
 
 }
 
-struct ViewTest: View {
+struct ViewTest2: View {
     var body: some View {
         Text("plop")
     }
