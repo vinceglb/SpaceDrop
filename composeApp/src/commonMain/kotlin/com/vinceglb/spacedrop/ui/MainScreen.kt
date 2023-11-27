@@ -3,10 +3,10 @@ package com.vinceglb.spacedrop.ui
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,6 +56,8 @@ class HomeScreen : Screen {
                     null
                 )
             }
+
+            TextField(value = greetingText, onValueChange = { greetingText = it })
         }
     }
 

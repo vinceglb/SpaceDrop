@@ -23,13 +23,13 @@ kotlin {
     androidTarget {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "11"
+                jvmTarget = "17"
             }
         }
     }
     
     jvm()
-    jvmToolchain(11)
+    jvmToolchain(17)
     
     sourceSets {
         commonMain.dependencies {
@@ -75,7 +75,10 @@ kotlin {
         }
 
         all {
-            languageSettings.optIn("kotlinx.cinterop.ExperimentalForeignApi")
+            languageSettings {
+                optIn("kotlinx.cinterop.ExperimentalForeignApi")
+                languageVersion = "2.0"
+            }
         }
     }
 }

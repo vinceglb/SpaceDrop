@@ -11,13 +11,13 @@ kotlin {
     androidTarget {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "11"
+                jvmTarget = "17"
             }
         }
     }
     
     jvm("desktop")
-    jvmToolchain(11)
+    jvmToolchain(17)
     
     listOf(
         iosX64(),
@@ -64,6 +64,12 @@ kotlin {
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
         }
+
+        all {
+            languageSettings {
+                languageVersion = "2.0"
+            }
+        }
     }
 }
 
@@ -104,8 +110,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     dependencies {

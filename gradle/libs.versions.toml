@@ -1,8 +1,8 @@
 [versions]
-kotlin = "1.9.20"
+kotlin = "1.9.21"
 compose = "1.5.4"
 compose-compiler = "1.5.4"
-compose-plugin = "1.5.10"
+compose-plugin = "1.5.11"
 agp = "8.1.4"
 android-minSdk = "24"
 android-compileSdk = "34"
