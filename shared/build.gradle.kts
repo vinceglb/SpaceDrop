@@ -45,6 +45,7 @@ kotlin {
             // Supabase
             api(libs.supabase.auth)
             api(libs.supabase.gotrue)
+            api(libs.supabase.storage)
         }
 
         jvmMain.dependencies {

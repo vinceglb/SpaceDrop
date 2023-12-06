@@ -1,5 +1,5 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.compose.ExperimentalComposeLibrary
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -49,6 +49,9 @@ kotlin {
             // Voyager
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.koin)
+
+            // File picker
+            api(libs.mpFilePicker)
         }
         
         androidMain.dependencies {
@@ -70,6 +73,11 @@ kotlin {
                 languageVersion = "2.0"
             }
         }
+    }
+
+    @Suppress("OPT_IN_USAGE")
+    compilerOptions {
+        freeCompilerArgs = listOf("-Xexpect-actual-classes")
     }
 }
 

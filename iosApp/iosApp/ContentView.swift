@@ -21,8 +21,8 @@ struct ContentView: View {
                     .padding()
         }
                 .task {
-                    for await s in viewModel.state {
-                        state = s
+                    for await state in viewModel.state {
+                        self.state = state
                     }
                 }
 

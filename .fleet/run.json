@@ -29,7 +29,7 @@
             "type": "android-app",
             "name": "Android App",
             "module": "SpaceDrop.composeApp.main",
-            "destination": "Pixel 7 API 34",
+            "destination": "Pixel 8 API 33",
         },
         
     ]

@@ -4,12 +4,15 @@ import co.touchlab.skie.configuration.annotations.DefaultArgumentInterop
 import com.vinceglb.spacedrop.data.repository.AuthRepository
 import com.vinceglb.spacedrop.data.supabase.AuthUserRemoteDataSource
 import com.vinceglb.spacedrop.shared.SupabaseKeyConfig
+import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.compose.auth.ComposeAuth
 import io.github.jan.supabase.compose.auth.appleNativeLogin
 import io.github.jan.supabase.compose.auth.googleNativeLogin
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
 import io.github.jan.supabase.gotrue.AuthConfig
+import io.github.jan.supabase.storage.Storage
+import io.github.jan.supabase.storage.storage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -43,8 +46,11 @@ val commonModule = module {
                 appleNativeLogin()
                 googleNativeLogin(serverClientId = "1072436209813-b9glgs6fsj6srj2g5lm23k48to59ft6p.apps.googleusercontent.com")
             }
+
+            install(Storage)
         }
     }
+    factory { get<SupabaseClient>().storage }
 }
 
 expect fun AuthConfig.platformAuthConfig()
