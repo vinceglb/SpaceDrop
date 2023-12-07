@@ -8,10 +8,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,13 +32,14 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 
-class SendFileScreen : Screen {
+object SendFileScreen : Screen {
     @Composable
     override fun Content() {
         val screenModel = getScreenModel<SendFileScreenModel>()
         SendFile(
             loading = screenModel.loading,
             onFileSelected = screenModel::sendFile,
+            onSignOut = screenModel::signOut,
         )
     }
 }
@@ -46,37 +49,42 @@ class SendFileScreen : Screen {
 private fun SendFile(
     loading: Boolean,
     onFileSelected: (UploadFile) -> Unit,
+    onSignOut: () -> Unit,
 ) {
     var showFilePicker by remember { mutableStateOf(false) }
 
-    Column {
-        AuthVince()
+    Scaffold {
+        Column {
+            Button(onClick = onSignOut) {
+                Text(text = "Sign out")
+            }
 
-        Text(text = "Send file")
+            Text(text = "Send file")
 
-        val primaryColor = MaterialTheme.colorScheme.primary
-        val cornerRadius = 32f
+            val primaryColor = MaterialTheme.colorScheme.primary
+            val cornerRadius = 32f
 
-        Card(
-            onClick = { showFilePicker = true },
-            shape = RoundedCornerShape(cornerRadius),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .padding(16.dp)
-        ) {
-            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                if (loading) {
-                    CircularProgressIndicator()
-                } else {
-                    Text(
-                        text = "Drop file here",
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
+            Card(
+                onClick = { showFilePicker = true },
+                shape = RoundedCornerShape(cornerRadius),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .padding(16.dp)
+            ) {
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                    if (loading) {
+                        CircularProgressIndicator()
+                    } else {
+                        Text(
+                            text = "Drop file here",
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+
+                    DottedLine(color = primaryColor, cornerRadius = cornerRadius)
                 }
-
-                DottedLine(color = primaryColor, cornerRadius = cornerRadius)
             }
         }
     }

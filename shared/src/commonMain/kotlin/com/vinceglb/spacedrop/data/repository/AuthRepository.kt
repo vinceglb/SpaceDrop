@@ -9,16 +9,8 @@ class AuthRepository(
 ) {
     val currentUser: SharedFlow<AuthUser?> =
         authUserRemoteDataSource.authUser
-
-    suspend fun loginWithGoogle() {
-        authUserRemoteDataSource.loginWithGoogle()
-    }
-
-    suspend fun loginWithIdToken(idToken: String) {
-        authUserRemoteDataSource.loginWithGoogle(idToken)
-    }
     
-    suspend fun logout() {
-        authUserRemoteDataSource.logout()
+    suspend fun signOut() {
+        authUserRemoteDataSource.signOut()
     }
 }
