@@ -8,6 +8,8 @@ import com.vinceglb.spacedrop.di.initKoin
 class SpaceDropApp : Application() {
     override fun onCreate() {
         super.onCreate()
+
+        // Koin
         initKoin(listOf(composeModule, androidModule))
     }
 }

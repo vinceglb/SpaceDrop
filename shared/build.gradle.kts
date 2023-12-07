@@ -46,6 +46,10 @@ kotlin {
             api(libs.supabase.auth)
             api(libs.supabase.gotrue)
             api(libs.supabase.storage)
+
+            // Logger
+            api(libs.kermit)
+            api(libs.kermit.koin)
         }
 
         jvmMain.dependencies {
