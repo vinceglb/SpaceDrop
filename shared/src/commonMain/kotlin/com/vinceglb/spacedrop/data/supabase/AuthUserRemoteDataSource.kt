@@ -1,11 +1,8 @@
 package com.vinceglb.spacedrop.data.supabase
 
 import com.vinceglb.spacedrop.model.AuthUser
-import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.gotrue.Auth
 import io.github.jan.supabase.gotrue.SessionStatus
-import io.github.jan.supabase.gotrue.auth
-import io.github.jan.supabase.gotrue.providers.Google
-import io.github.jan.supabase.gotrue.providers.builtin.IDToken
 import io.github.jan.supabase.gotrue.user.UserInfo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharedFlow
@@ -15,11 +12,11 @@ import kotlinx.coroutines.flow.shareIn
 import kotlinx.serialization.json.jsonPrimitive
 
 class AuthUserRemoteDataSource(
-    private val client: SupabaseClient,
+    private val auth: Auth,
     applicationScope: CoroutineScope,
 ) {
 
-    internal val authUser: SharedFlow<AuthUser?> = client.auth
+    val authUser: SharedFlow<AuthUser?> = auth
         .sessionStatus
         .map(::processUserStatus)
         .shareIn(
@@ -28,21 +25,12 @@ class AuthUserRemoteDataSource(
             started = SharingStarted.WhileSubscribed()
         )
 
-    internal suspend fun loginWithGoogle(idToken: String? = null) {
-        when (idToken) {
-            null -> client.auth.signInWith(Google)
-            else -> client.auth.signInWith(IDToken) {
-                this.idToken = idToken
-                provider = Google
-            }
-        }
-    }
-
-    internal suspend fun logout() {
-        client.auth.signOut()
+    suspend fun signOut() {
+        auth.signOut()
     }
 
     private fun processUserStatus(status: SessionStatus): AuthUser? {
+        println("processUserStatus $status")
         return when (status) {
             is SessionStatus.Authenticated -> {
                 when (val user: UserInfo? = status.session.user) {

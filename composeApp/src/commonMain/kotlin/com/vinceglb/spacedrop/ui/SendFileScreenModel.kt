@@ -33,6 +33,12 @@ class SendFileScreenModel(
             )
         }.invokeOnCompletion { loading = false }
     }
+
+    fun signOut() {
+        screenModelScope.launch {
+            authRepository.signOut()
+        }
+    }
 }
 
 expect class UploadFile {

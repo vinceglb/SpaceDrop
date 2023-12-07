@@ -7,10 +7,12 @@ import com.vinceglb.spacedrop.shared.SupabaseKeyConfig
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.compose.auth.ComposeAuth
 import io.github.jan.supabase.compose.auth.appleNativeLogin
+import io.github.jan.supabase.compose.auth.composeAuth
 import io.github.jan.supabase.compose.auth.googleNativeLogin
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.Auth
 import io.github.jan.supabase.gotrue.AuthConfig
+import io.github.jan.supabase.gotrue.auth
 import io.github.jan.supabase.storage.Storage
 import io.github.jan.supabase.storage.storage
 import kotlinx.coroutines.CoroutineScope
@@ -50,7 +52,9 @@ val commonModule = module {
             install(Storage)
         }
     }
+    factory { get<SupabaseClient>().auth }
     factory { get<SupabaseClient>().storage }
+    factory { get<SupabaseClient>().composeAuth }
 }
 
 expect fun AuthConfig.platformAuthConfig()
