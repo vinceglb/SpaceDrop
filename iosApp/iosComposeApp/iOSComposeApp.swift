@@ -11,10 +11,6 @@ import ComposeApp
 
 @main
 struct iOSComposeApp: App {
-    init() {
-        MainViewControllerKt.doInitKoinIOS()
-    }
-    
     var body: some Scene {
         WindowGroup {
             ContentView()
