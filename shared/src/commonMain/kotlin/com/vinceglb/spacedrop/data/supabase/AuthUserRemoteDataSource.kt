@@ -1,5 +1,6 @@
 package com.vinceglb.spacedrop.data.supabase
 
+import co.touchlab.kermit.Logger
 import com.vinceglb.spacedrop.model.AuthUser
 import io.github.jan.supabase.gotrue.Auth
 import io.github.jan.supabase.gotrue.SessionStatus
@@ -30,7 +31,7 @@ class AuthUserRemoteDataSource(
     }
 
     private fun processUserStatus(status: SessionStatus): AuthUser? {
-        println("processUserStatus $status")
+        Logger.d("AuthUserRemoteDataSource") { "processUserStatus $status" }
         return when (status) {
             is SessionStatus.Authenticated -> {
                 when (val user: UserInfo? = status.session.user) {
@@ -46,5 +47,4 @@ class AuthUserRemoteDataSource(
             else -> null
         }
     }
-
 }

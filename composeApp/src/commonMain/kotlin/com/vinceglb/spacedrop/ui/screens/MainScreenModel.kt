@@ -24,11 +24,6 @@ class MainScreenModel(
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = MainState.Loading,
     )
-
-    override fun onDispose() {
-        super.onDispose()
-        println("MainScreenModel onDispose")
-    }
 }
 
 sealed class MainState {

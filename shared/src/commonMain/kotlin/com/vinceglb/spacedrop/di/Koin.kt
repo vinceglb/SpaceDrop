@@ -1,5 +1,7 @@
 package com.vinceglb.spacedrop.di
 
+import co.touchlab.kermit.Logger
+import co.touchlab.kermit.koin.KermitKoinLogger
 import co.touchlab.skie.configuration.annotations.DefaultArgumentInterop
 import com.vinceglb.spacedrop.data.repository.AuthRepository
 import com.vinceglb.spacedrop.data.supabase.AuthUserRemoteDataSource
@@ -62,6 +64,10 @@ expect fun AuthConfig.platformAuthConfig()
 @DefaultArgumentInterop.Enabled
 fun initKoin(modules: List<Module> = emptyList()) {
     startKoin {
+        logger(
+            KermitKoinLogger(Logger.withTag("Koin"))
+        )
+
         modules(
             commonModule,
             *modules.toTypedArray(),
