@@ -5,9 +5,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.vinceglb.spacedrop.di.composeModule
+import com.vinceglb.spacedrop.di.composePlatformModule
+import com.vinceglb.spacedrop.di.startAppKoin
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.gotrue.handleDeeplinks
 import org.koin.android.ext.android.inject
+import org.koin.compose.KoinApplication
 
 class MainActivity : ComponentActivity() {
     private val supabaseClient: SupabaseClient by inject()
@@ -18,7 +22,11 @@ class MainActivity : ComponentActivity() {
         supabaseClient.handleDeeplinks(intent)
 
         setContent {
-            App()
+            KoinApplication(
+                application = { startAppKoin(listOf(composeModule, composePlatformModule)) }
+            ) {
+                App()
+            }
         }
     }
 }

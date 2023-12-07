@@ -20,6 +20,7 @@ import io.github.jan.supabase.storage.storage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
@@ -64,13 +65,17 @@ expect fun AuthConfig.platformAuthConfig()
 @DefaultArgumentInterop.Enabled
 fun initKoin(modules: List<Module> = emptyList()) {
     startKoin {
-        logger(
-            KermitKoinLogger(Logger.withTag("Koin"))
-        )
-
-        modules(
-            commonModule,
-            *modules.toTypedArray(),
-        )
+        startAppKoin(modules)
     }
+}
+
+fun KoinApplication.startAppKoin(modules: List<Module>) {
+    // Logger
+    logger(KermitKoinLogger(Logger.withTag("Koin")))
+
+    // Modules
+    modules(
+        commonModule,
+        *modules.toTypedArray(),
+    )
 }
