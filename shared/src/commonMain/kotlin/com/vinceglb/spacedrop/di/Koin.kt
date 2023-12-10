@@ -2,7 +2,6 @@ package com.vinceglb.spacedrop.di
 
 import co.touchlab.kermit.Logger
 import co.touchlab.kermit.koin.KermitKoinLogger
-import co.touchlab.skie.configuration.annotations.DefaultArgumentInterop
 import com.russhwolf.settings.ExperimentalSettingsApi
 import com.vinceglb.spacedrop.data.repository.AuthRepository
 import com.vinceglb.spacedrop.data.repository.DeviceRepository
@@ -88,9 +87,8 @@ val commonModule = module {
 
 expect fun AuthConfig.platformAuthConfig()
 
-expect fun platformModule(): Module
+expect val platformModule: Module
 
-@DefaultArgumentInterop.Enabled
 fun initKoin(modules: List<Module> = emptyList()) {
     startKoin {
         startAppKoin(modules)
@@ -104,7 +102,7 @@ fun KoinApplication.startAppKoin(modules: List<Module>) {
     // Modules
     modules(
         commonModule,
-        platformModule(),
+        platformModule,
         *modules.toTypedArray(),
     )
 }

@@ -18,4 +18,4 @@ val composeModule = module {
     factoryOf(::SendFileScreenModel)
 }
 
-expect fun composePlatformModule(): Module
+expect val composePlatformModule: Module

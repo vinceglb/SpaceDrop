@@ -11,6 +11,6 @@ actual fun AuthConfig.platformAuthConfig() {
     scheme = "login"
 }
 
-actual fun platformModule(): Module = module {
+actual val platformModule: Module = module {
     factoryOf(::SettingsFactory)
 }
