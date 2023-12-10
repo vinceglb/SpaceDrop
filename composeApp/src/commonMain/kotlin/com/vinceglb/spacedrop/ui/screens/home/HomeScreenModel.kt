@@ -10,9 +10,10 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class HomeScreenModel(
-    authRepository: AuthRepository,
+    private val authRepository: AuthRepository,
     deviceRepository: DeviceRepository,
 ) : ScreenModel {
     val uiState: StateFlow<HomeScreenUiState> = combine(
@@ -30,6 +31,12 @@ class HomeScreenModel(
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = HomeScreenUiState(),
     )
+
+    fun signOut() {
+        screenModelScope.launch {
+            authRepository.signOut()
+        }
+    }
 }
 
 data class HomeScreenUiState(
