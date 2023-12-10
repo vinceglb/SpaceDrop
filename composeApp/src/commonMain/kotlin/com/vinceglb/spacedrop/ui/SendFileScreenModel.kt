@@ -22,7 +22,7 @@ class SendFileScreenModel(
         loading = true
 
         screenModelScope.launch {
-            val user = authRepository.currentUser.first()
+            val user = authRepository.getCurrentUser().first()
             val userId = user?.id ?: return@launch
 
             val supabasePath = "$userId/${uploadFile.filename}"

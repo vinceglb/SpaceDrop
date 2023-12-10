@@ -11,7 +11,7 @@ fun main() = application {
     // Launch app
     Window(onCloseRequest = ::exitApplication) {
         KoinApplication(
-            application = { startAppKoin(listOf(composeModule, composePlatformModule)) }
+            application = { startAppKoin(listOf(composeModule, composePlatformModule())) }
         ) {
             App()
         }

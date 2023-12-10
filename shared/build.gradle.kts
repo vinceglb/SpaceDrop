@@ -4,6 +4,7 @@ import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.serialization)
     alias(libs.plugins.skie)
     alias(libs.plugins.buildKonfig)
 }
@@ -44,12 +45,18 @@ kotlin {
 
             // Supabase
             api(libs.supabase.auth)
-            api(libs.supabase.gotrue)
-            api(libs.supabase.storage)
+            implementation(libs.supabase.gotrue)
+            api(libs.supabase.storage)      // TODO transform into implementation
+            implementation(libs.supabase.realtime)
+            implementation(libs.supabase.postgrest)
+
+            // Multiplatform Settings
+            implementation(libs.multiplatform.settings)
+            implementation(libs.multiplatform.settings.coroutines)
 
             // Logger
             api(libs.kermit)
-            api(libs.kermit.koin)
+            implementation(libs.kermit.koin)
         }
 
         jvmMain.dependencies {
@@ -65,7 +72,7 @@ kotlin {
 
         appleMain.dependencies {
             // KMM ViewModel
-            api(libs.kmm.viewmodel)
+            implementation(libs.kmm.viewmodel)
 
             // Ktor
             implementation(libs.ktor.client.darwin)

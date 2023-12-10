@@ -1,37 +1,39 @@
-package com.vinceglb.spacedrop.ui.screens
+package com.vinceglb.spacedrop.ui.screens.home
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.vinceglb.spacedrop.data.repository.AuthRepository
 import com.vinceglb.spacedrop.data.repository.DeviceRepository
+import com.vinceglb.spacedrop.model.AuthUser
+import com.vinceglb.spacedrop.model.Device
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 
-class MainScreenModel(
+class HomeScreenModel(
     authRepository: AuthRepository,
     deviceRepository: DeviceRepository,
 ) : ScreenModel {
-    val uiState: StateFlow<MainState> = combine(
+    val uiState: StateFlow<HomeScreenUiState> = combine(
         authRepository.getCurrentUser(),
         deviceRepository.getCurrentDevice(),
-    ) { currentUser, currentDevice ->
-        MainState.Success(
-            isLogged = currentUser != null,
-            isRegistered = currentDevice != null,
+        deviceRepository.getDevices(),
+    ) { currentUser, currentDevice, devices ->
+        HomeScreenUiState(
+            currentUser = currentUser,
+            currentDevice = currentDevice,
+            devices = devices,
         )
     }.stateIn(
         scope = screenModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = MainState.Loading,
+        initialValue = HomeScreenUiState(),
     )
 }
 
-sealed class MainState {
-    data object Loading : MainState()
-    data class Success(
-        val isLogged: Boolean,
-        val isRegistered: Boolean,
-    ) : MainState()
-}
+data class HomeScreenUiState(
+    val currentUser: AuthUser? = null,
+    val currentDevice: Device? = null,
+    val devices: List<Device> = emptyList(),
+)

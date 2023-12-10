@@ -14,8 +14,9 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.Navigator
-import com.vinceglb.spacedrop.ui.SendFileScreen
+import com.vinceglb.spacedrop.ui.screens.home.HomeScreen
 import com.vinceglb.spacedrop.ui.screens.login.LoginScreen
+import com.vinceglb.spacedrop.ui.screens.register.RegisterScreen
 
 object MainScreen : Screen {
     @Composable
@@ -33,10 +34,10 @@ object MainScreen : Screen {
                         !state.isLogged -> navigator.replaceAll(LoginScreen)
 
                         // Redirect to RegisterScreen if logged and not registered
-                        !state.isRegistered -> navigator.replaceAll(SendFileScreen) // TODO replace with RegisterScreen
+                        !state.isRegistered -> navigator.replaceAll(RegisterScreen)
 
                         // Redirect to SendFileScreen if logged and registered
-                        else -> navigator.replaceAll(SendFileScreen)
+                        else -> navigator.replaceAll(HomeScreen)
                     }
                 }
             }

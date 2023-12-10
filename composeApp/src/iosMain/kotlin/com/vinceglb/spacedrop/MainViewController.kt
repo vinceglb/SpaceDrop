@@ -1,6 +1,8 @@
+@file:Suppress("unused", "FunctionName")
+
+package com.vinceglb.spacedrop
 
 import androidx.compose.ui.window.ComposeUIViewController
-import com.vinceglb.spacedrop.App
 import com.vinceglb.spacedrop.di.composeModule
 import com.vinceglb.spacedrop.di.composePlatformModule
 import com.vinceglb.spacedrop.di.initKoin
@@ -12,4 +14,4 @@ fun MainViewController() = ComposeUIViewController {
     }
 }
 
-fun initKoinIOS() = initKoin(listOf(composeModule, composePlatformModule))
+fun initKoinIOS() = initKoin(listOf(composeModule, composePlatformModule()))

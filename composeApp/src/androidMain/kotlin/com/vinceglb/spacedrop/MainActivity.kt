@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             KoinApplication(
-                application = { startAppKoin(listOf(composeModule, composePlatformModule)) }
+                application = { startAppKoin(listOf(composeModule, composePlatformModule())) }
             ) {
                 App()
             }
