@@ -5,6 +5,7 @@ import io.github.jan.supabase.gotrue.Auth
 import io.github.jan.supabase.gotrue.SessionStatus
 import io.github.jan.supabase.gotrue.user.UserInfo
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -15,8 +16,7 @@ class AuthUserRemoteDataSource(
     private val auth: Auth,
     applicationScope: CoroutineScope,
 ) {
-
-    val authUser: SharedFlow<AuthUser?> = auth
+    private val authUser: SharedFlow<AuthUser?> = auth
         .sessionStatus
         .map(::processUserStatus)
         .shareIn(
@@ -24,6 +24,9 @@ class AuthUserRemoteDataSource(
             replay = 1,
             started = SharingStarted.WhileSubscribed()
         )
+
+    fun getCurrentUser(): Flow<AuthUser?> =
+        authUser
 
     suspend fun signOut() {
         auth.signOut()
