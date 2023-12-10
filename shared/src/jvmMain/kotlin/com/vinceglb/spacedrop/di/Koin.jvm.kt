@@ -8,6 +8,6 @@ import org.koin.dsl.module
 
 actual fun AuthConfig.platformAuthConfig() {}
 
-actual fun platformModule(): Module = module {
+actual val platformModule: Module = module {
     factoryOf(::SettingsFactory)
 }

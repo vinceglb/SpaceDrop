@@ -14,4 +14,4 @@ fun MainViewController() = ComposeUIViewController {
     }
 }
 
-fun initKoinIOS() = initKoin(listOf(composeModule, composePlatformModule()))
+fun initKoinIOS() = initKoin(listOf(composeModule, composePlatformModule))
