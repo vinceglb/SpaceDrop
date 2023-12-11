@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class HomeScreenModel(
     private val authRepository: AuthRepository,
-    deviceRepository: DeviceRepository,
+    private val deviceRepository: DeviceRepository,
 ) : ScreenModel {
     val uiState: StateFlow<HomeScreenUiState> = combine(
         authRepository.getCurrentUser(),
@@ -35,6 +35,12 @@ class HomeScreenModel(
     fun signOut() {
         screenModelScope.launch {
             authRepository.signOut()
+        }
+    }
+
+    fun deleteDevice(deviceId: String) {
+        screenModelScope.launch {
+            deviceRepository.deleteDevice(deviceId)
         }
     }
 }
