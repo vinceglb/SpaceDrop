@@ -37,6 +37,7 @@ object HomeScreen : Screen {
         HomeScreen(
             uiState = uiState,
             onSignOut = screenModel::signOut,
+            onDeleteDevice = screenModel::deleteDevice,
         )
     }
 }
@@ -45,6 +46,7 @@ object HomeScreen : Screen {
 private fun HomeScreen(
     uiState: HomeScreenUiState,
     onSignOut: () -> Unit,
+    onDeleteDevice: (String) -> Unit,
 ) {
     Scaffold {
         Box(
@@ -95,6 +97,7 @@ private fun HomeScreen(
                 ManageDevices(
                     devices = uiState.devices,
                     currentDevice = uiState.currentDevice,
+                    onDeleteDevice = onDeleteDevice,
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))

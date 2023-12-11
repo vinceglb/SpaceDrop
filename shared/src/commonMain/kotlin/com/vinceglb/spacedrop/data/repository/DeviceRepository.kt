@@ -51,4 +51,12 @@ class DeviceRepository(
         // Save the device ID locally
         deviceLocalDataSource.setDeviceId(device.id)
     }
+
+    suspend fun deleteDevice(deviceId: String) {
+        deviceRemoteDataSource.deleteDevice(deviceId)
+    }
+
+    suspend fun renameDevice(deviceId: String, name: String) {
+        deviceRemoteDataSource.renameDevice(deviceId, name)
+    }
 }

@@ -28,6 +28,10 @@ interface DeviceRemoteDataSource {
 
     suspend fun createDevice(createDevice: DeviceCreateRequest): Device
 
+    suspend fun deleteDevice(deviceId: String)
+
+    suspend fun renameDevice(deviceId: String, name: String): Device
+
     suspend fun updateDeviceFcmToken(deviceId: String, token: String): Device
 }
 
@@ -77,6 +81,16 @@ class DeviceRemoteDataSourceSupabase(
     override suspend fun createDevice(createDevice: DeviceCreateRequest): Device =
         devicesTable
             .insert(createDevice) { select() }
+            .decodeSingle<Device>()
+
+    override suspend fun deleteDevice(deviceId: String) {
+        devicesTable
+            .delete { filter { Device::id eq deviceId } }
+    }
+
+    override suspend fun renameDevice(deviceId: String, name: String): Device =
+        devicesTable
+            .update({ Device::name setTo name }) { filter { Device::id eq deviceId } }
             .decodeSingle<Device>()
 
     override suspend fun updateDeviceFcmToken(deviceId: String, token: String): Device =
