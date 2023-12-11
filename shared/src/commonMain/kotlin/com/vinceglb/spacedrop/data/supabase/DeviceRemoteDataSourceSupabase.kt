@@ -30,7 +30,7 @@ interface DeviceRemoteDataSource {
 
     suspend fun deleteDevice(deviceId: String)
 
-    suspend fun renameDevice(deviceId: String, name: String): Device
+    suspend fun renameDevice(deviceId: String, name: String)
 
     suspend fun updateDeviceFcmToken(deviceId: String, token: String): Device
 }
@@ -88,10 +88,10 @@ class DeviceRemoteDataSourceSupabase(
             .delete { filter { Device::id eq deviceId } }
     }
 
-    override suspend fun renameDevice(deviceId: String, name: String): Device =
+    override suspend fun renameDevice(deviceId: String, name: String) {
         devicesTable
             .update({ Device::name setTo name }) { filter { Device::id eq deviceId } }
-            .decodeSingle<Device>()
+    }
 
     override suspend fun updateDeviceFcmToken(deviceId: String, token: String): Device =
         devicesTable
