@@ -1,5 +1,6 @@
 package com.vinceglb.spacedrop.data.supabase
 
+import co.touchlab.kermit.Logger
 import com.vinceglb.spacedrop.model.Device
 import com.vinceglb.spacedrop.model.DeviceCreateRequest
 import io.github.jan.supabase.postgrest.Postgrest
@@ -15,6 +16,7 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 
@@ -47,11 +49,13 @@ class DeviceRemoteDataSourceSupabase(
                     .onStart { devicesChannel.subscribe() }
                     .onCompletion { devicesChannel.unsubscribe() }
             )
-        }.shareIn(
-            scope = applicationScope,
-            replay = 1,
-            started = SharingStarted.WhileSubscribed()
-        )
+        }
+            .onEach { Logger.i("DeviceRemoteDataSourceSupabase") { "Devices: ${it.map { it.name }}" } }
+            .shareIn(
+                scope = applicationScope,
+                replay = 1,
+                started = SharingStarted.WhileSubscribed()
+            )
 
     override fun getDevices(): Flow<List<Device>> =
         devices

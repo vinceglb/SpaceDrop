@@ -1,10 +1,12 @@
 package com.vinceglb.spacedrop.data.settings
 
+import co.touchlab.kermit.Logger
 import com.russhwolf.settings.ExperimentalSettingsApi
 import com.russhwolf.settings.coroutines.FlowSettings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.shareIn
 
 interface DeviceLocalDataSource {
@@ -20,6 +22,7 @@ class DeviceLocalDataSourcePreferences(
 ) : DeviceLocalDataSource {
     private val deviceId: Flow<String?> = settings
         .getStringOrNullFlow(DEVICE_ID_KEY)
+        .onEach { Logger.i("DeviceLocalDataSourcePreferences") { "Device ID: $it" } }
         .shareIn(
             scope = applicationScope,
             replay = 1,

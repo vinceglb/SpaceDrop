@@ -1,5 +1,6 @@
 package com.vinceglb.spacedrop.data.supabase
 
+import co.touchlab.kermit.Logger
 import com.vinceglb.spacedrop.model.AuthUser
 import io.github.jan.supabase.gotrue.Auth
 import io.github.jan.supabase.gotrue.SessionStatus
@@ -9,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.serialization.json.jsonPrimitive
 
@@ -19,6 +21,7 @@ class AuthUserRemoteDataSource(
     private val authUser: SharedFlow<AuthUser?> = auth
         .sessionStatus
         .map(::processUserStatus)
+        .onEach { Logger.i("AuthUserRemoteDataSource") { "User = ${it?.id}" } }
         .shareIn(
             scope = applicationScope,
             replay = 1,
