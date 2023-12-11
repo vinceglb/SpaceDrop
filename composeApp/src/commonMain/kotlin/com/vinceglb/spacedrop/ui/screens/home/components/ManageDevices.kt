@@ -5,22 +5,28 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,6 +42,7 @@ import com.vinceglb.spacedrop.ui.components.PlatformIcon
 fun ManageDevices(
     devices: List<Device>,
     currentDevice: Device?,
+    onRenameDevice: (String, String) -> Unit,
     onDeleteDevice: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -50,6 +57,7 @@ fun ManageDevices(
                 DeviceItem(
                     device = device,
                     displayCurrent = device == currentDevice,
+                    onRenameDevice = onRenameDevice,
                     onDeleteDevice = onDeleteDevice,
                 )
 
@@ -65,10 +73,13 @@ fun ManageDevices(
 private fun DeviceItem(
     device: Device,
     displayCurrent: Boolean,
+    onRenameDevice: (String, String) -> Unit,
     onDeleteDevice: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var dropdownExpanded by remember { mutableStateOf(false) }
+    var isDropdownOpen by remember(device) { mutableStateOf(false) }
+    var isRenameDeviceDialogOpen by remember(device) { mutableStateOf(false) }
+    var newDeviceName by remember(device) { mutableStateOf(device.name) }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -114,7 +125,7 @@ private fun DeviceItem(
         Spacer(modifier = Modifier.weight(1f))
 
         IconButton(
-            onClick = { dropdownExpanded = true },
+            onClick = { isDropdownOpen = true },
             modifier = Modifier.padding(16.dp)
         ) {
             Icon(
@@ -124,13 +135,26 @@ private fun DeviceItem(
             )
 
             DropdownMenu(
-                expanded = dropdownExpanded,
-                onDismissRequest = { dropdownExpanded = false },
+                expanded = isDropdownOpen,
+                onDismissRequest = { isDropdownOpen = false },
             ) {
+                DropdownMenuItem(
+                    text = { Text("Rename") },
+                    onClick = {
+                        isDropdownOpen = false
+                        isRenameDeviceDialogOpen = true
+                    },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Default.Edit,
+                            contentDescription = null
+                        )
+                    }
+                )
                 DropdownMenuItem(
                     text = { Text("Delete") },
                     onClick = {
-                        dropdownExpanded = false
+                        isDropdownOpen = false
                         onDeleteDevice(device.id)
                     },
                     leadingIcon = {
@@ -142,5 +166,44 @@ private fun DeviceItem(
                 )
             }
         }
+    }
+
+    if (isRenameDeviceDialogOpen) {
+        AlertDialog(
+            onDismissRequest = { isRenameDeviceDialogOpen = false },
+            title = { Text("Rename Device") },
+            text = {
+                Column {
+                    Text(
+                        "Enter a new name for your device",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = newDeviceName,
+                        onValueChange = { newDeviceName = it },
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        isRenameDeviceDialogOpen = false
+                        onRenameDevice(device.id, newDeviceName)
+                    }
+                ) {
+                    Text("Rename")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { isRenameDeviceDialogOpen = false }
+                ) {
+                    Text("Cancel")
+                }
+            },
+        )
     }
 }

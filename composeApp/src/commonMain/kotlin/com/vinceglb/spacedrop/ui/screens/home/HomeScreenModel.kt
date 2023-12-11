@@ -43,6 +43,12 @@ class HomeScreenModel(
             deviceRepository.deleteDevice(deviceId)
         }
     }
+
+    fun renameDevice(deviceId: String, newName: String) {
+        screenModelScope.launch {
+            deviceRepository.renameDevice(deviceId, newName)
+        }
+    }
 }
 
 data class HomeScreenUiState(
