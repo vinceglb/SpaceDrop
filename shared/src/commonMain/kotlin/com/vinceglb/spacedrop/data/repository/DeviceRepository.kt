@@ -1,5 +1,6 @@
 package com.vinceglb.spacedrop.data.repository
 
+import co.touchlab.kermit.Logger
 import com.vinceglb.spacedrop.data.settings.DeviceLocalDataSource
 import com.vinceglb.spacedrop.data.supabase.DeviceRemoteDataSource
 import com.vinceglb.spacedrop.model.Device
@@ -22,6 +23,7 @@ class DeviceRepository(
             deviceLocalDataSource.getDeviceId(),
             deviceRemoteDataSource.getDevices(),
         ) { deviceId, devices ->
+            Logger.i("DeviceRepository") { "Device ID: $deviceId / Size ${devices.size} / current: ${devices.find { it.id == deviceId }?.name}" }
             devices.find { it.id == deviceId }
         }.shareIn(
             scope = applicationScope,
