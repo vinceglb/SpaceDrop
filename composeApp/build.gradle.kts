@@ -51,7 +51,7 @@ kotlin {
             implementation(libs.voyager.koin)
 
             // File picker
-            api(libs.mpFilePicker)
+            implementation(libs.mpFilePicker)
         }
         
         androidMain.dependencies {
@@ -62,6 +62,9 @@ kotlin {
 
             // Koin
             implementation(libs.koin.androidx.compose)
+
+            // Accompanist
+            implementation(libs.accompanist.permissions)
         }
 
         desktopMain.dependencies {
