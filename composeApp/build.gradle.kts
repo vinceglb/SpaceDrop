@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.googleServices)
 }
 
 kotlin {
@@ -65,6 +66,11 @@ kotlin {
 
             // Accompanist
             implementation(libs.accompanist.permissions)
+
+            // Firebase
+            implementation(project.dependencies.platform(libs.firebase.bom))
+            implementation(libs.firebase.analytics.ktx)
+            implementation(libs.firebase.messaging.ktx)
         }
 
         desktopMain.dependencies {

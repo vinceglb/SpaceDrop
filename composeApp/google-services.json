@@ -1,0 +1,163 @@
+{
+  "project_info": {
+    "project_number": "419042376123",
+    "firebase_url": "https://bento-vince.firebaseio.com",
+    "project_id": "bento-vince",
+    "storage_bucket": "bento-vince.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:419042376123:android:959d2f3639bf90088b6c9e",
+        "android_client_info": {
+          "package_name": "app.goril.messenger2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "419042376123-i8b2gefa9ig0q28buv6sa3omhhhtithv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVhejpVU-A1BwTfVUzI3LN6wwo2YfAWGc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "419042376123-i8b2gefa9ig0q28buv6sa3omhhhtithv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "419042376123-bugig7omrknte8rbb5s60ifd4l13hd7s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.vinceglb.spacedrop"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:419042376123:android:6d606765728dae9c8b6c9e",
+        "android_client_info": {
+          "package_name": "app.goril.messenger3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "419042376123-b1n133j8kj5ovnhc46pcukg6kk703i3e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.goril.messenger3",
+            "certificate_hash": "9c65d917994957421cc7b82360c8e345e245c516"
+          }
+        },
+        {
+          "client_id": "419042376123-i8b2gefa9ig0q28buv6sa3omhhhtithv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVhejpVU-A1BwTfVUzI3LN6wwo2YfAWGc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "419042376123-i8b2gefa9ig0q28buv6sa3omhhhtithv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "419042376123-bugig7omrknte8rbb5s60ifd4l13hd7s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.vinceglb.spacedrop"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:419042376123:android:2946bd1f56f4f5258b6c9e",
+        "android_client_info": {
+          "package_name": "com.example.ambicheck"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "419042376123-i8b2gefa9ig0q28buv6sa3omhhhtithv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVhejpVU-A1BwTfVUzI3LN6wwo2YfAWGc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "419042376123-i8b2gefa9ig0q28buv6sa3omhhhtithv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "419042376123-bugig7omrknte8rbb5s60ifd4l13hd7s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.vinceglb.spacedrop"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:419042376123:android:5edfdab04ec5475c8b6c9e",
+        "android_client_info": {
+          "package_name": "com.vinceglb.spacedrop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "419042376123-i8b2gefa9ig0q28buv6sa3omhhhtithv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVhejpVU-A1BwTfVUzI3LN6wwo2YfAWGc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "419042376123-i8b2gefa9ig0q28buv6sa3omhhhtithv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "419042376123-bugig7omrknte8rbb5s60ifd4l13hd7s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.vinceglb.spacedrop"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
