@@ -1,6 +1,7 @@
 package com.vinceglb.spacedrop.data.repository
 
 import co.touchlab.kermit.Logger
+import com.vinceglb.spacedrop.data.firebase.MessagingRemoteDataSource
 import com.vinceglb.spacedrop.data.settings.DeviceLocalDataSource
 import com.vinceglb.spacedrop.data.supabase.DeviceRemoteDataSource
 import com.vinceglb.spacedrop.model.Device
@@ -11,12 +12,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.shareIn
 
 class DeviceRepository(
     applicationScope: CoroutineScope,
     private val deviceLocalDataSource: DeviceLocalDataSource,
     private val deviceRemoteDataSource: DeviceRemoteDataSource,
+    private val messagingRemoteDataSource: MessagingRemoteDataSource,
 ) {
     private val currentDevice: SharedFlow<Device?> =
         combine(
@@ -38,18 +41,33 @@ class DeviceRepository(
         currentDevice
 
     suspend fun registerDevice(deviceName: String) {
+        // Get the FCM token if any
+        val fcmToken = messagingRemoteDataSource.getMessagingToken()
+
         // Create the device
-        // TODO: Get the FCM token
         val device = deviceRemoteDataSource.createDevice(
             DeviceCreateRequest(
                 name = deviceName,
-                fcmToken = null,
+                fcmToken = fcmToken,
                 platform = currentPlatform,
             )
         )
 
         // Save the device ID locally
         deviceLocalDataSource.setDeviceId(device.id)
+    }
+
+    suspend fun updateFcmToken(fcmToken: String) {
+        // Get the current device
+        val currentDevice = currentDevice.firstOrNull() ?: return
+
+        if (currentDevice.fcmToken == fcmToken) {
+            Logger.i("DeviceRepository") { "FCM token already up to date: $fcmToken" }
+            return
+        }
+
+        // Update the FCM token
+        deviceRemoteDataSource.updateDeviceFcmToken(currentDevice.id, fcmToken)
     }
 
     suspend fun deleteDevice(deviceId: String) {

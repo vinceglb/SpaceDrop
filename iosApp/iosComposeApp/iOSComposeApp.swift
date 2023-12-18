@@ -39,13 +39,8 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     }
 
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-        // Retrieve FCM token
-        messaging.token { token, error in
-            if let error = error {
-                print("Error fetching FCM registration token: \(error)")
-            } else if let token = token {
-                print("FCM registration token: \(token)")
-            }
+        if let token = fcmToken {
+            MessagingUtil.shared.updateFcmToken(token: token)
         }
     }
 
@@ -69,6 +64,8 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
 
 @main
 struct iOSComposeApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+
     init() {
         MainViewControllerKt.doInitKoinIOS()
     }

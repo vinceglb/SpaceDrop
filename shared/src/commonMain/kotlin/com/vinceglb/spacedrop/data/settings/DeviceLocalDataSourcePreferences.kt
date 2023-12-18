@@ -5,6 +5,7 @@ import com.russhwolf.settings.ExperimentalSettingsApi
 import com.russhwolf.settings.coroutines.FlowSettings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.shareIn
@@ -20,13 +21,13 @@ class DeviceLocalDataSourcePreferences(
     private val settings: FlowSettings,
     applicationScope: CoroutineScope,
 ) : DeviceLocalDataSource {
-    private val deviceId: Flow<String?> = settings
+    private val deviceId: SharedFlow<String?> = settings
         .getStringOrNullFlow(DEVICE_ID_KEY)
         .onEach { Logger.i("DeviceLocalDataSourcePreferences") { "Device ID: $it" } }
         .shareIn(
             scope = applicationScope,
+            started = SharingStarted.WhileSubscribed(),
             replay = 1,
-            started = SharingStarted.WhileSubscribed()
         )
 
     override fun getDeviceId(): Flow<String?> =
