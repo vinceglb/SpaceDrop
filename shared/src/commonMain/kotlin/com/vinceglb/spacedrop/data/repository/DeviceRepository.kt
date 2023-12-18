@@ -26,7 +26,6 @@ class DeviceRepository(
             deviceLocalDataSource.getDeviceId(),
             deviceRemoteDataSource.getDevices(),
         ) { deviceId, devices ->
-            Logger.i("DeviceRepository") { "Device ID: $deviceId / Size ${devices.size} / current: ${devices.find { it.id == deviceId }?.name}" }
             devices.find { it.id == deviceId }
         }.shareIn(
             scope = applicationScope,
@@ -59,7 +58,8 @@ class DeviceRepository(
 
     suspend fun updateFcmToken(fcmToken: String) {
         // Get the current device
-        val currentDevice = currentDevice.firstOrNull() ?: return
+        val currentDevice = currentDevice.firstOrNull()
+            ?: throw IllegalStateException("No device ID found")
 
         if (currentDevice.fcmToken == fcmToken) {
             Logger.i("DeviceRepository") { "FCM token already up to date: $fcmToken" }

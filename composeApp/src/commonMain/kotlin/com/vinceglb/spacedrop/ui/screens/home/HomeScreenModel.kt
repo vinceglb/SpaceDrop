@@ -4,8 +4,10 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.vinceglb.spacedrop.data.repository.AuthRepository
 import com.vinceglb.spacedrop.data.repository.DeviceRepository
+import com.vinceglb.spacedrop.data.repository.EventRepository
 import com.vinceglb.spacedrop.model.AuthUser
 import com.vinceglb.spacedrop.model.Device
+import com.vinceglb.spacedrop.model.Event
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -15,16 +17,19 @@ import kotlinx.coroutines.launch
 class HomeScreenModel(
     private val authRepository: AuthRepository,
     private val deviceRepository: DeviceRepository,
+    private val eventRepository: EventRepository,
 ) : ScreenModel {
     val uiState: StateFlow<HomeScreenUiState> = combine(
         authRepository.getCurrentUser(),
         deviceRepository.getCurrentDevice(),
         deviceRepository.getDevices(),
-    ) { currentUser, currentDevice, devices ->
+        eventRepository.getDeviceEvents(),
+    ) { currentUser, currentDevice, devices, events ->
         HomeScreenUiState(
             currentUser = currentUser,
             currentDevice = currentDevice,
             devices = devices,
+            events = events,
         )
     }.stateIn(
         scope = screenModelScope,
@@ -49,10 +54,17 @@ class HomeScreenModel(
             deviceRepository.renameDevice(deviceId, newName)
         }
     }
+
+    fun sendNotificationEvent(destinationDeviceId: String) {
+        screenModelScope.launch {
+            eventRepository.sendNotificationEvent(destinationDeviceId)
+        }
+    }
 }
 
 data class HomeScreenUiState(
     val currentUser: AuthUser? = null,
     val currentDevice: Device? = null,
     val devices: List<Device> = emptyList(),
+    val events: List<Event> = emptyList(),
 )

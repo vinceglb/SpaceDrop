@@ -1,6 +1,7 @@
 package com.vinceglb.spacedrop.ui.screens.home.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -44,6 +45,7 @@ fun ManageDevices(
     currentDevice: Device?,
     onRenameDevice: (String, String) -> Unit,
     onDeleteDevice: (String) -> Unit,
+    onSendNotification: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Surface(
@@ -59,6 +61,7 @@ fun ManageDevices(
                     displayCurrent = device == currentDevice,
                     onRenameDevice = onRenameDevice,
                     onDeleteDevice = onDeleteDevice,
+                    onSendNotification = onSendNotification,
                 )
 
                 if (index < devices.size - 1) {
@@ -75,6 +78,7 @@ private fun DeviceItem(
     displayCurrent: Boolean,
     onRenameDevice: (String, String) -> Unit,
     onDeleteDevice: (String) -> Unit,
+    onSendNotification: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var isDropdownOpen by remember(device) { mutableStateOf(false) }
@@ -83,7 +87,9 @@ private fun DeviceItem(
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable { onSendNotification(device.id) }
     ) {
         PlatformIcon(
             platform = device.platform,
