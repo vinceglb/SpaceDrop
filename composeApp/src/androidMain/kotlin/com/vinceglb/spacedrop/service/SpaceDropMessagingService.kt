@@ -3,17 +3,28 @@ package com.vinceglb.spacedrop.service
 import co.touchlab.kermit.Logger
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.vinceglb.spacedrop.data.repository.DeviceRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 
 class SpaceDropMessagingService : FirebaseMessagingService() {
-    companion object {
-        private const val TAG = "SpaceDropMessagingService"
-    }
+    private val deviceRepository: DeviceRepository by inject()
+    private val applicationScope: CoroutineScope by inject()
 
     override fun onNewToken(token: String) {
         Logger.i(TAG) { "FCM registration token: $token" }
+
+        applicationScope.launch {
+            deviceRepository.updateFcmToken(token)
+        }
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
         Logger.i(TAG) { "Message received from: ${message.from}" }
+    }
+
+    companion object {
+        private const val TAG = "SpaceDropMessagingService"
     }
 }
