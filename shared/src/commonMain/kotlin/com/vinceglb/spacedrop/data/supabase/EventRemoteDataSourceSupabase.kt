@@ -25,6 +25,8 @@ interface EventRemoteDataSource {
     fun getEvents(): Flow<List<Event>>
 
     suspend fun createEvent(createEvent: EventCreateRequest): Event
+
+    suspend fun deleteEvent(eventId: String)
 }
 
 class EventRemoteDataSourceSupabase(
@@ -73,6 +75,11 @@ class EventRemoteDataSourceSupabase(
         eventsTable
             .insert(createEvent) { select() }
             .decodeSingle()
+
+    override suspend fun deleteEvent(eventId: String) {
+        eventsTable
+            .delete { filter { Event::id eq eventId } }
+    }
 
     private suspend fun fetchEvents(): List<Event> =
         eventsTable

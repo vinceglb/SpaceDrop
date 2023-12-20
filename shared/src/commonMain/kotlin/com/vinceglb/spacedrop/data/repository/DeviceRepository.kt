@@ -59,7 +59,11 @@ class DeviceRepository(
     suspend fun updateFcmToken(fcmToken: String) {
         // Get the current device
         val currentDevice = currentDevice.firstOrNull()
-            ?: throw IllegalStateException("No device ID found")
+
+        if (currentDevice == null) {
+            Logger.i("DeviceRepository") { "FCM Token update aborted, device not registered yet." }
+            return
+        }
 
         if (currentDevice.fcmToken == fcmToken) {
             Logger.i("DeviceRepository") { "FCM token already up to date: $fcmToken" }

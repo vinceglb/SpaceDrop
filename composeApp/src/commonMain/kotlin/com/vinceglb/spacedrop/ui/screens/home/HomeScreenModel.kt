@@ -7,7 +7,6 @@ import com.vinceglb.spacedrop.data.repository.DeviceRepository
 import com.vinceglb.spacedrop.data.repository.EventRepository
 import com.vinceglb.spacedrop.model.AuthUser
 import com.vinceglb.spacedrop.model.Device
-import com.vinceglb.spacedrop.model.Event
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -23,13 +22,11 @@ class HomeScreenModel(
         authRepository.getCurrentUser(),
         deviceRepository.getCurrentDevice(),
         deviceRepository.getDevices(),
-        eventRepository.getDeviceEvents(),
-    ) { currentUser, currentDevice, devices, events ->
+    ) { currentUser, currentDevice, devices ->
         HomeScreenUiState(
             currentUser = currentUser,
             currentDevice = currentDevice,
             devices = devices,
-            events = events,
         )
     }.stateIn(
         scope = screenModelScope,
@@ -66,5 +63,4 @@ data class HomeScreenUiState(
     val currentUser: AuthUser? = null,
     val currentDevice: Device? = null,
     val devices: List<Device> = emptyList(),
-    val events: List<Event> = emptyList(),
 )

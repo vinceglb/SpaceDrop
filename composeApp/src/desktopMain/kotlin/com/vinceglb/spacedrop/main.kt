@@ -11,6 +11,7 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberTrayState
 import com.vinceglb.spacedrop.di.composeModule
 import com.vinceglb.spacedrop.di.composePlatformModule
+import com.vinceglb.spacedrop.di.desktopModule
 import com.vinceglb.spacedrop.di.startAppKoin
 import org.koin.compose.KoinApplication
 
@@ -27,7 +28,8 @@ fun main() = application {
                     trayState.sendNotification(
                         Notification(
                             title = "Hello",
-                            message = "World!"
+                            message = "World!",
+                            type = Notification.Type.Info
                         )
                     )
                 }
@@ -35,10 +37,22 @@ fun main() = application {
         }
     )
 
+    val sendNotification = { title: String, message: String ->
+        trayState.sendNotification(Notification(title = title, message = message))
+    }
+
     // Launch app
     Window(onCloseRequest = ::exitApplication) {
         KoinApplication(
-            application = { startAppKoin(listOf(composeModule, composePlatformModule)) }
+            application = {
+                startAppKoin(
+                    listOf(
+                        composeModule,
+                        composePlatformModule,
+                        desktopModule(sendNotification)
+                    )
+                )
+            }
         ) {
             App()
         }
