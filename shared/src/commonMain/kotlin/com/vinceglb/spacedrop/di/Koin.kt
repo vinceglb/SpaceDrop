@@ -5,12 +5,15 @@ import co.touchlab.kermit.koin.KermitKoinLogger
 import com.russhwolf.settings.ExperimentalSettingsApi
 import com.vinceglb.spacedrop.data.repository.AuthRepository
 import com.vinceglb.spacedrop.data.repository.DeviceRepository
+import com.vinceglb.spacedrop.data.repository.EventRepository
 import com.vinceglb.spacedrop.data.settings.DeviceLocalDataSource
 import com.vinceglb.spacedrop.data.settings.DeviceLocalDataSourcePreferences
 import com.vinceglb.spacedrop.data.settings.SettingsFactory
 import com.vinceglb.spacedrop.data.supabase.AuthUserRemoteDataSource
 import com.vinceglb.spacedrop.data.supabase.DeviceRemoteDataSource
 import com.vinceglb.spacedrop.data.supabase.DeviceRemoteDataSourceSupabase
+import com.vinceglb.spacedrop.data.supabase.EventRemoteDataSource
+import com.vinceglb.spacedrop.data.supabase.EventRemoteDataSourceSupabase
 import com.vinceglb.spacedrop.shared.SupabaseKeyConfig
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.compose.auth.ComposeAuth
@@ -52,11 +55,13 @@ val commonModule = module {
     // Repositories
     singleOf(::AuthRepository)
     singleOf(::DeviceRepository)
+    singleOf(::EventRepository)
 
     // DataSources
     factoryOf(::AuthUserRemoteDataSource)
-    factoryOf(::DeviceRemoteDataSourceSupabase) { bind<DeviceRemoteDataSource>() }
     factoryOf(::DeviceLocalDataSourcePreferences) { bind<DeviceLocalDataSource>() }
+    factoryOf(::DeviceRemoteDataSourceSupabase) { bind<DeviceRemoteDataSource>() }
+    factoryOf(::EventRemoteDataSourceSupabase) { bind<EventRemoteDataSource>() }
 
     // Supabase
     single {

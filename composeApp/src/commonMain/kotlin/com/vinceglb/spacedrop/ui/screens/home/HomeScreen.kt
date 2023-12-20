@@ -39,6 +39,7 @@ object HomeScreen : Screen {
             onSignOut = screenModel::signOut,
             onRenameDevice = screenModel::renameDevice,
             onDeleteDevice = screenModel::deleteDevice,
+            onSendNotification = screenModel::sendNotificationEvent,
         )
     }
 }
@@ -49,6 +50,7 @@ private fun HomeScreen(
     onSignOut: () -> Unit,
     onRenameDevice: (String, String) -> Unit,
     onDeleteDevice: (String) -> Unit,
+    onSendNotification: (String) -> Unit,
 ) {
     Scaffold {
         Box(
@@ -101,6 +103,7 @@ private fun HomeScreen(
                     currentDevice = uiState.currentDevice,
                     onRenameDevice = onRenameDevice,
                     onDeleteDevice = onDeleteDevice,
+                    onSendNotification = onSendNotification,
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
