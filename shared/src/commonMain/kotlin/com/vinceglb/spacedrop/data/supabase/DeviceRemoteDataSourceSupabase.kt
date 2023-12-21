@@ -5,6 +5,7 @@ import com.vinceglb.spacedrop.data.repository.AuthRepository
 import com.vinceglb.spacedrop.model.Device
 import com.vinceglb.spacedrop.model.DeviceCreateRequest
 import io.github.jan.supabase.postgrest.Postgrest
+import io.github.jan.supabase.postgrest.query.Order
 import io.github.jan.supabase.realtime.PostgresAction
 import io.github.jan.supabase.realtime.Realtime
 import io.github.jan.supabase.realtime.channel
@@ -112,6 +113,6 @@ class DeviceRemoteDataSourceSupabase(
 
     private suspend fun fetchDevices(): List<Device> =
         devicesTable
-            .select()
+            .select { order("name", Order.ASCENDING) }
             .decodeList()
 }
