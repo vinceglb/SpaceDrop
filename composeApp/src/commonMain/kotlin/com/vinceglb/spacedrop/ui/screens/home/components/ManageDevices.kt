@@ -38,6 +38,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vinceglb.spacedrop.model.Device
 import com.vinceglb.spacedrop.ui.components.PlatformIcon
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 
 @Composable
 fun ManageDevices(
@@ -58,7 +60,7 @@ fun ManageDevices(
             itemsIndexed(devices) { index, device ->
                 DeviceItem(
                     device = device,
-                    displayCurrent = device == currentDevice,
+                    isCurrent = device == currentDevice,
                     onRenameDevice = onRenameDevice,
                     onDeleteDevice = onDeleteDevice,
                     onSendNotification = onSendNotification,
@@ -75,7 +77,7 @@ fun ManageDevices(
 @Composable
 private fun DeviceItem(
     device: Device,
-    displayCurrent: Boolean,
+    isCurrent: Boolean,
     onRenameDevice: (String, String) -> Unit,
     onDeleteDevice: (String) -> Unit,
     onSendNotification: (String) -> Unit,
@@ -104,7 +106,7 @@ private fun DeviceItem(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
-                if (displayCurrent) {
+                if (isCurrent) {
                     Surface(
                         color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f),
                         shape = CircleShape,
@@ -121,8 +123,16 @@ private fun DeviceItem(
                     }
                 }
             }
+
+            val lastSeenStr = remember(device.lastSeen) {
+                when (isCurrent) {
+                    true -> ""
+                    else -> "· Last seen ${getTimeElapsedDescription(device.lastSeen)}"
+                }
+            }
+
             Text(
-                device.platform.name,
+                "${device.platform.name} $lastSeenStr",
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.outline,
             )
@@ -211,5 +221,21 @@ private fun DeviceItem(
                 }
             },
         )
+    }
+}
+
+fun getTimeElapsedDescription(instant: Instant): String {
+    val currentInstant = Clock.System.now()
+    val duration = currentInstant - instant
+
+    val minutes = duration.inWholeMinutes
+    val hours = duration.inWholeHours
+    val days = duration.inWholeDays
+
+    return when {
+        days > 0 -> "$days ${if (days > 1) "days" else "day"} ago"
+        hours > 0 -> "$hours ${if (hours > 1) "hours" else "hour"} ago"
+        minutes > 0 -> "$minutes ${if (minutes > 1) "minutes" else "minute"} ago"
+        else -> "now"
     }
 }

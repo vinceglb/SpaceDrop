@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
+import kotlinx.datetime.Instant
 
 interface DeviceRemoteDataSource {
     fun getDevices(): Flow<List<Device>>
@@ -32,6 +33,8 @@ interface DeviceRemoteDataSource {
     suspend fun deleteDevice(deviceId: String)
 
     suspend fun renameDevice(deviceId: String, name: String)
+
+    suspend fun updateLastSeen(deviceId: String, lastSeen: Instant)
 
     suspend fun updateDeviceFcmToken(deviceId: String, token: String): Device
 }
@@ -95,6 +98,11 @@ class DeviceRemoteDataSourceSupabase(
     override suspend fun renameDevice(deviceId: String, name: String) {
         devicesTable
             .update({ Device::name setTo name }) { filter { Device::id eq deviceId } }
+    }
+
+    override suspend fun updateLastSeen(deviceId: String, lastSeen: Instant) {
+        devicesTable
+            .update({ Device::lastSeen setTo lastSeen }) { filter { Device::id eq deviceId } }
     }
 
     override suspend fun updateDeviceFcmToken(deviceId: String, token: String): Device =

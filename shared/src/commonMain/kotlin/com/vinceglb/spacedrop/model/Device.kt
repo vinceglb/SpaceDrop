@@ -1,5 +1,6 @@
 package com.vinceglb.spacedrop.model
 
+import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -16,6 +17,12 @@ data class Device(
 
     @SerialName("user_id")
     val userId: String,
+
+    @SerialName("created_at")
+    val createdAt: Instant,
+
+    @SerialName("last_seen")
+    val lastSeen: Instant,
 )
 
 @Serializable
