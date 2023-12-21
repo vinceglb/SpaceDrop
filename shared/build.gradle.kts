@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.serialization)
-    alias(libs.plugins.skie)
+    // alias(libs.plugins.skie)
     alias(libs.plugins.buildKonfig)
 }
 
@@ -38,7 +38,7 @@ kotlin {
             implementation(libs.kotlinx.coroutines.core)
 
             // Skie
-            implementation(libs.skie.annotations)
+            // implementation(libs.skie.annotations)
 
             // Koin
             implementation(libs.koin.core)
@@ -89,7 +89,6 @@ kotlin {
         all {
             languageSettings {
                 optIn("kotlinx.cinterop.ExperimentalForeignApi")
-                languageVersion = "2.0"
             }
         }
     }

@@ -76,17 +76,6 @@ kotlin {
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
         }
-
-        all {
-            languageSettings {
-                languageVersion = "2.0"
-            }
-        }
-    }
-
-    @Suppress("OPT_IN_USAGE")
-    compilerOptions {
-        freeCompilerArgs = listOf("-Xexpect-actual-classes")
     }
 }
 
