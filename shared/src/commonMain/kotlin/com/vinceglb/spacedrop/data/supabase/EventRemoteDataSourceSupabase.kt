@@ -35,8 +35,9 @@ class EventRemoteDataSourceSupabase(
     realtime: Realtime,
     applicationScope: CoroutineScope,
 ) : EventRemoteDataSource {
-    private val eventsTable = postgrest["events"]
-    private val eventsChannel = realtime.channel("events")
+    private val eventTableName = "events"
+    private val eventsTable = postgrest[eventTableName]
+    private val eventsChannel = realtime.channel("events-realtime")
 
     @Suppress("RemoveExplicitTypeArguments")
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -52,9 +53,7 @@ class EventRemoteDataSourceSupabase(
                     // Subscribe to changes
                     emitAll(
                         eventsChannel
-                            .postgresChangeFlow<PostgresAction>(schema = "public") {
-                                table = "events"
-                            }
+                            .postgresChangeFlow<PostgresAction>(schema = "public") { table = eventTableName }
                             .map { fetchEvents() }
                             .onStart { eventsChannel.subscribe() }
                             .onCompletion { eventsChannel.unsubscribe() }

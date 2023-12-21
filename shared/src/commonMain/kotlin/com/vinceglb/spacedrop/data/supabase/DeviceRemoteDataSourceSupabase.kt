@@ -11,6 +11,7 @@ import io.github.jan.supabase.realtime.channel
 import io.github.jan.supabase.realtime.postgresChangeFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -41,8 +42,9 @@ class DeviceRemoteDataSourceSupabase(
     realtime: Realtime,
     applicationScope: CoroutineScope,
 ) : DeviceRemoteDataSource {
-    private val devicesTable = postgrest["devices"]
-    private val devicesChannel = realtime.channel("devices")
+    private val deviceTableName = "devices"
+    private val devicesTable = postgrest[deviceTableName]
+    private val devicesChannel = realtime.channel("devices-realtime")
 
     @Suppress("RemoveExplicitTypeArguments")
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -55,12 +57,14 @@ class DeviceRemoteDataSourceSupabase(
                     // Emit an initial value
                     emit(fetchDevices())
 
+                    // TODO improve this
+                    // Wait 1 second to avoid conflicts EventRemoteDataSourceSupabase
+                    delay(1_000)
+
                     // Subscribe to changes
                     emitAll(
                         devicesChannel
-                            .postgresChangeFlow<PostgresAction>(schema = "public") {
-                                table = "devices"
-                            }
+                            .postgresChangeFlow<PostgresAction>(schema = "public") { table = deviceTableName }
                             .map { fetchDevices() }
                             .onStart { devicesChannel.subscribe() }
                             .onCompletion { devicesChannel.unsubscribe() }
