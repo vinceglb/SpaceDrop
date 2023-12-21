@@ -13,7 +13,9 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.shareIn
+import kotlinx.datetime.Clock
 
 class DeviceRepository(
     applicationScope: CoroutineScope,
@@ -27,11 +29,13 @@ class DeviceRepository(
             deviceRemoteDataSource.getDevices(),
         ) { deviceId, devices ->
             devices.find { it.id == deviceId }
-        }.shareIn(
-            scope = applicationScope,
-            started = SharingStarted.WhileSubscribed(),
-            replay = 1,
-        )
+        }
+            .onEach(::processDevice)
+            .shareIn(
+                scope = applicationScope,
+                started = SharingStarted.WhileSubscribed(),
+                replay = 1,
+            )
 
     fun getDevices(): Flow<List<Device>> =
         deviceRemoteDataSource.getDevices()
@@ -80,5 +84,19 @@ class DeviceRepository(
 
     suspend fun renameDevice(deviceId: String, name: String) {
         deviceRemoteDataSource.renameDevice(deviceId, name)
+    }
+
+    private var shouldUpdateLastSeen = true
+    private suspend fun processDevice(device: Device?) {
+        if (shouldUpdateLastSeen && device != null) {
+            Logger.i("DeviceRepository") { "Updating last seen for device: ${device.id}" }
+            deviceRemoteDataSource.updateLastSeen(device.id, Clock.System.now())
+            shouldUpdateLastSeen = false
+        }
+
+        if (device == null) {
+            Logger.i("DeviceRepository") { "No device found, resetting last seen update flag." }
+            shouldUpdateLastSeen = true
+        }
     }
 }
