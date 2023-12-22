@@ -16,6 +16,10 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+          cache: 'gradle'
+          cache-dependency-path: | # optional
+            ./*.gradle*
+            ./**/gradle-wrapper.properties
 
       - name: Create local.properties file
         run: |
