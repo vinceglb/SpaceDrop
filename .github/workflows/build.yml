@@ -4,7 +4,7 @@ on:
   workflow_dispatch: # Manual trigger
 
 jobs:
-  build-and-package:
+  build-and-package-windows:
     runs-on: windows-latest
 
     steps:
@@ -26,8 +26,8 @@ jobs:
         shell: pwsh
         run: .\gradlew packageMsi
 
-#      - name: Upload MSI artifact
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: msi-artifact
-#          path: path/to/generated/file.msi # Replace with the actual path to the generated MSI file
+      - name: Upload MSI artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: msi-artifact
+          path: .\composeApp\build\compose\binaries\main\msi\*.msi
