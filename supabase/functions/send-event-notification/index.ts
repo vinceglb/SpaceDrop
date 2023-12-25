@@ -2,15 +2,20 @@
 // https://deno.land/manual/getting_started/setup_your_environment
 // This enables autocomplete, go to definition, etc.
 
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.1";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { Database, Tables } from "../_shared/database.types.ts";
-import { googleApi } from "../_shared/googleApi.ts";
+import { GoogleAPI } from "https://deno.land/x/google_deno_integration/mod.ts";
 
 console.log("Hello from Functions!")
 
 Deno.serve(async (req) => {
+  console.log("Salut")
+
   const json = await req.json()
+  console.log('json', json)
   const event: Tables<'events'> = json.record
+
+  const authHeader = req.headers.get('Authorization')!
 
   // Create a Supabase client with the Auth context of the logged in user.
   const supabaseClient = createClient<Database>(
@@ -20,10 +25,13 @@ Deno.serve(async (req) => {
     Deno.env.get('SUPABASE_ANON_KEY') ?? '',
     // Create client with Auth context of the user that called the function.
     // This way your row-level-security (RLS) policies are applied.
-    { global: { headers: { Authorization: req.headers.get('Authorization')! } } }
+    { global: { headers: { Authorization: authHeader } } }
   )
 
-  const res = await supabaseClient.from("devices").select()
+  const res = await supabaseClient
+    .from("devices")
+    .select()
+
   console.log('ez res', res)
 
   const { data, error } = await supabaseClient
@@ -35,7 +43,7 @@ Deno.serve(async (req) => {
   console.log('ez data', data)
 
   if (error) {
-    console.log(error)
+    console.error(error)
     return new Response(
       JSON.stringify(error),
       { headers: { "Content-Type": "application/json" } },
@@ -43,30 +51,37 @@ Deno.serve(async (req) => {
   }
 
   if (data.fcm_token) {
-    await sendFCM({ fcmToken: data.fcm_token, eventId: event.id })
+    // await sendFCM({ fcmToken: data.fcm_token, eventId: event.id })
+    console.log("Sending FCM", data.fcm_token, event.id)
+
+    const googleApi = new GoogleAPI({
+      // The email of the service account
+      email: Deno.env.get('CLIENT_EMAIL') ?? 'Missing CLIENT_EMAIL',
+      // The scope of the API you want to access
+      scope: ['https://www.googleapis.com/auth/firebase.messaging'],
+      // The value from the private key
+      key: Deno.env.get('PRIVATE_KEY') ?? 'Missing PRIVATE_KEY',
+    })
+
+    // Make a request to the Google Cloud Messaging API
+    const response = await googleApi.post('https://fcm.googleapis.com/v1/projects/bento-vince/messages:send', {
+      message: {
+        token: data.fcm_token,
+        data: {
+          id: event.id,
+        },
+      },
+    })
+
+    console.log('fcm response', response)
   }
 
+  console.log('finishing')
   return new Response(
-    JSON.stringify(data),
+    JSON.stringify('data'),
     { headers: { "Content-Type": "application/json" } },
   )
 })
-
-async function sendFCM(params: { fcmToken: string, eventId: string }): Promise<void> {
-  console.log("Sending FCM", params.fcmToken, params.eventId)
-
-  // Make a request to the Google Cloud Messaging API
-  const response = await googleApi.post('https://fcm.googleapis.com/v1/projects/bento-vince/messages:send', {
-    message: {
-      token: params.fcmToken,
-      data: {
-        id: params.eventId,
-      },
-    },
-  })
-
-  console.log(response)
-}
 
 /* To invoke locally:
 
