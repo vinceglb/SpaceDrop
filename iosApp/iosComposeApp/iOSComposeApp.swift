@@ -12,16 +12,19 @@ import FirebaseMessaging
 import ComposeApp
 
 class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        // Connect to APNs
-        application.registerForRemoteNotifications()
-
+    func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
+    ) -> Bool {
         // Firebase
         FirebaseApp.configure()
 
         // Delegate
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
+
+        // Connect to APNs
+        application.registerForRemoteNotifications()
 
         return true
     }
@@ -32,26 +35,44 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     }
 
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+        // Send token to Firebase Cloud Messaging
         if let token = fcmToken {
             MessagingUtil.shared.updateFcmToken(token: token)
         }
     }
 
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse
+    ) async {
         let userInfo = response.notification.request.content.userInfo
-        print("userNotificationCenter - Receive notification \(userInfo)")
 
         // Tel Firebase that we receive the message
         Messaging.messaging().appDidReceiveMessage(userInfo)
+
+        // Execute event
+        if let eventId = userInfo["id"] as? String {
+            MessagingUtil.shared.onNotificationEventId(eventId: eventId)
+        }
     }
 
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) async -> UIBackgroundFetchResult {
-        print("application - Receive notification \(userInfo)")
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification
+    ) async -> UNNotificationPresentationOptions {
+        let userInfo = notification.request.content.userInfo
+        let eventId = userInfo["id"]
+        print("WillPresent = \(String(describing: eventId))")
 
         // Tel Firebase that we receive the message
         Messaging.messaging().appDidReceiveMessage(userInfo)
 
-        return UIBackgroundFetchResult.newData
+        // Execute event
+        if let eventId = userInfo["id"] as? String {
+            MessagingUtil.shared.onNotificationEventId(eventId: eventId)
+        }
+
+        return [[.sound]]
     }
 }
 
@@ -66,7 +87,7 @@ struct iOSComposeApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .onOpenURL(perform: handleDeepLink)
+                    .onOpenURL(perform: handleDeepLink)
         }
     }
 

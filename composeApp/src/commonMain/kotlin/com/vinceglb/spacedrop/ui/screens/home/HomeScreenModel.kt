@@ -22,7 +22,12 @@ class HomeScreenModel(
         authRepository.getCurrentUser(),
         deviceRepository.getCurrentDevice(),
         deviceRepository.getDevices(),
-    ) { currentUser, currentDevice, devices ->
+        eventRepository.getDeviceEvents(),
+    ) { currentUser, currentDevice, devices, events ->
+        if (events.isNotEmpty()) {
+            eventRepository.executeEvents()
+        }
+
         HomeScreenUiState(
             currentUser = currentUser,
             currentDevice = currentDevice,

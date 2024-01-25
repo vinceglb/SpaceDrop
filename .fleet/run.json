@@ -13,7 +13,7 @@
                 "target": "iosApp",
             },
             "configuration": "Debug",
-            "destination": "iPhone 15 | iOS 17.0",
+            "destination": "iPhone 15 | iOS 17.2",
         },
         {
             "type": "xcode-app",
@@ -23,7 +23,7 @@
                 "target": "iosComposeApp",
             },
             "configuration": "Debug",
-            "destination": "iPhone 15 | iOS 17.0",
+            "destination": "iPhone 15 | iOS 17.2",
         },
         {
             "type": "android-app",

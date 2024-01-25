@@ -1,5 +1,6 @@
 package com.vinceglb.spacedrop.data.supabase
 
+import co.touchlab.kermit.Logger
 import com.vinceglb.spacedrop.data.repository.AuthRepository
 import com.vinceglb.spacedrop.model.Event
 import com.vinceglb.spacedrop.model.EventCreateRequest
@@ -18,11 +19,14 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 
 interface EventRemoteDataSource {
     fun getEvents(): Flow<List<Event>>
+
+    suspend fun getEvent(eventId: String): Event?
 
     suspend fun createEvent(createEvent: EventCreateRequest): Event
 
@@ -61,6 +65,7 @@ class EventRemoteDataSourceSupabase(
                 }
             }
         }
+        .onEach { Logger.i(TAG) { "Events: ${it.map { it.id }}" } }
         .shareIn(
             scope = applicationScope,
             started = SharingStarted.WhileSubscribed(),
@@ -69,6 +74,11 @@ class EventRemoteDataSourceSupabase(
 
     override fun getEvents(): Flow<List<Event>> =
         events
+
+    override suspend fun getEvent(eventId: String): Event? =
+        eventsTable
+            .select { filter { Event::id eq eventId } }
+            .decodeSingleOrNull()
 
     override suspend fun createEvent(createEvent: EventCreateRequest): Event =
         eventsTable
@@ -84,4 +94,8 @@ class EventRemoteDataSourceSupabase(
         eventsTable
             .select()
             .decodeList()
+
+    companion object {
+        private const val TAG = "EventRemoteDataSourceSupabase"
+    }
 }

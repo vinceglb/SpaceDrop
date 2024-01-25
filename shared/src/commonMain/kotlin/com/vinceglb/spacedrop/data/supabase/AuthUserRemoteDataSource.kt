@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.serialization.json.jsonPrimitive
 
@@ -20,8 +21,13 @@ class AuthUserRemoteDataSource(
 ) {
     private val authUser: SharedFlow<AuthUser?> = auth
         .sessionStatus
+        .onStart {
+            Logger.i(TAG) { "onStart starting" }
+            auth.awaitInitialization()
+            Logger.i(TAG) { "onStart finished" }
+        }
         .map(::processUserStatus)
-        .onEach { Logger.i("AuthUserRemoteDataSource") { "User = ${it?.id}" } }
+        .onEach { Logger.i(TAG) { "User = ${it?.id}" } }
         .shareIn(
             scope = applicationScope,
             replay = 1,
@@ -36,6 +42,8 @@ class AuthUserRemoteDataSource(
     }
 
     private fun processUserStatus(status: SessionStatus): AuthUser? {
+        Logger.i(TAG) { "Status = $status" }
+
         return when (status) {
             is SessionStatus.Authenticated -> {
                 when (val user: UserInfo? = status.session.user) {
@@ -50,5 +58,9 @@ class AuthUserRemoteDataSource(
 
             else -> null
         }
+    }
+
+    companion object {
+        private const val TAG = "AuthUserRemoteDataSource"
     }
 }

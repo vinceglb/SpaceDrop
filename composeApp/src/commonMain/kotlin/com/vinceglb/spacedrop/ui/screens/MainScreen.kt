@@ -42,6 +42,8 @@ object MainScreen : Screen {
                         // Redirect to PermissionScreen if not all permissions granted
                         !isAllPermissionsGranted -> navigator.replaceAll(PermissionScreen)
 
+                        // state.notificationEventId != null -> navigator.replaceAll(EventScreen(state.notificationEventId))
+
                         // Redirect to SendFileScreen if logged and registered
                         else -> navigator.replaceAll(HomeScreen)
                     }

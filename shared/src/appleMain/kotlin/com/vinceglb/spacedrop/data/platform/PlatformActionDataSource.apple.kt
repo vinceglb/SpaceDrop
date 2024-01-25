@@ -1,32 +1,31 @@
 package com.vinceglb.spacedrop.data.platform
 
-import co.touchlab.kermit.Logger
-import platform.Foundation.NSUUID
-import platform.UserNotifications.UNMutableNotificationContent
-import platform.UserNotifications.UNNotificationRequest
-import platform.UserNotifications.UNTimeIntervalNotificationTrigger
-import platform.UserNotifications.UNUserNotificationCenter
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
+import platform.UIKit.UIAlertAction
+import platform.UIKit.UIAlertActionStyleDefault
+import platform.UIKit.UIAlertController
+import platform.UIKit.UIAlertControllerStyleAlert
+import platform.UIKit.UIApplication
 
 actual class PlatformActionDataSource {
     actual suspend fun sendNotification() {
-        val content = UNMutableNotificationContent().apply {
-            setTitle("SpaceDrop")
-            setBody("This is a notification")
-        }
+        val alertController = UIAlertController.alertControllerWithTitle(
+            title = "Hello",
+            message = "World",
+            preferredStyle = UIAlertControllerStyleAlert
+        )
 
-        val trigger = UNTimeIntervalNotificationTrigger.triggerWithTimeInterval(5.0, false)
-        val identifier = NSUUID().UUIDString
-        val request = UNNotificationRequest.requestWithIdentifier(identifier, content, trigger)
+        val okAction = UIAlertAction.actionWithTitle(
+            title = "OK",
+            style = UIAlertActionStyleDefault,
+            handler = null
+        )
 
-        suspendCoroutine { continuation ->
-            UNUserNotificationCenter.currentNotificationCenter().addNotificationRequest(request) {
-                if (it != null) {
-                    Logger.e("PlatformActionDataSource") { "Error: $it" }
-                }
-                continuation.resume(Unit)
-            }
-        }
+        alertController.addAction(okAction)
+
+        UIApplication.sharedApplication.keyWindow?.rootViewController?.presentViewController(
+            alertController,
+            animated = true,
+            completion = null
+        )
     }
 }
