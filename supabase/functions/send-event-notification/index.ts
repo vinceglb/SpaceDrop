@@ -2,7 +2,7 @@
 // https://deno.land/manual/getting_started/setup_your_environment
 // This enables autocomplete, go to definition, etc.
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 import { Database, Tables } from "../_shared/database.types.ts";
 import { GoogleAPI } from "https://deno.land/x/google_deno_integration/mod.ts";
 
@@ -69,6 +69,10 @@ Deno.serve(async (req) => {
         token: data.fcm_token,
         data: {
           id: event.id,
+        },
+        notification: {
+          title: event.type,
+          body: "Tap to view",
         },
       },
     })
