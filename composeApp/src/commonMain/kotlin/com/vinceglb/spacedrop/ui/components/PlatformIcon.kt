@@ -8,6 +8,7 @@ import androidx.compose.ui.graphics.Color
 import com.vinceglb.spacedrop.model.Platform
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import spacedrop.composeapp.generated.resources.Res
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -18,31 +19,31 @@ fun PlatformIcon(
 ) {
     when (platform) {
         Platform.Android -> Icon(
-            painterResource("icons/android_logo.xml"),
+            painterResource(Res.drawable.android_logo),
             contentDescription = "Android Logo",
             tint = tint,
             modifier = modifier
         )
         Platform.IOS -> Icon(
-            painterResource("icons/apple_logo.xml"),
+            painterResource(Res.drawable.apple_logo),
             contentDescription = "IOS Logo",
             tint = tint,
             modifier = modifier
         )
         Platform.Linux -> Icon(
-            painterResource("icons/linux_logo.xml"),
+            painterResource(Res.drawable.linux_logo),
             contentDescription = "Linux Logo",
             tint = tint,
             modifier = modifier
         )
         Platform.MacOS -> Icon(
-            painterResource("icons/apple_logo.xml"),
+            painterResource(Res.drawable.apple_logo),
             contentDescription = "MacOS Logo",
             tint = tint,
             modifier = modifier
         )
         Platform.Windows -> Icon(
-            painterResource("icons/windows_logo.xml"),
+            painterResource(Res.drawable.windows_logo),
             contentDescription = "Windows Logo",
             tint = tint,
             modifier = modifier
