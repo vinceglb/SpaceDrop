@@ -8,6 +8,8 @@ import com.vinceglb.spacedrop.data.repository.DeviceRepository
 import com.vinceglb.spacedrop.data.repository.EventRepository
 import com.vinceglb.spacedrop.data.settings.DeviceLocalDataSource
 import com.vinceglb.spacedrop.data.settings.DeviceLocalDataSourcePreferences
+import com.vinceglb.spacedrop.data.settings.EventLocalDataSource
+import com.vinceglb.spacedrop.data.settings.EventLocalDataSourcePreferences
 import com.vinceglb.spacedrop.data.settings.SettingsFactory
 import com.vinceglb.spacedrop.data.supabase.AuthUserRemoteDataSource
 import com.vinceglb.spacedrop.data.supabase.DeviceRemoteDataSource
@@ -60,6 +62,7 @@ val commonModule = module {
     // DataSources
     factoryOf(::AuthUserRemoteDataSource)
     factoryOf(::DeviceLocalDataSourcePreferences) { bind<DeviceLocalDataSource>() }
+    factoryOf(::EventLocalDataSourcePreferences) { bind<EventLocalDataSource>() }
     factoryOf(::DeviceRemoteDataSourceSupabase) { bind<DeviceRemoteDataSource>() }
     factoryOf(::EventRemoteDataSourceSupabase) { bind<EventRemoteDataSource>() }
 

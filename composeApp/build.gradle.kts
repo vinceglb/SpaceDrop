@@ -1,4 +1,3 @@
-import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
@@ -41,7 +40,6 @@ kotlin {
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
-            @OptIn(ExperimentalComposeLibrary::class)
             implementation(compose.components.resources)
 
             // Koin
@@ -56,10 +54,13 @@ kotlin {
         }
         
         androidMain.dependencies {
+            // AndroidX
+            implementation(libs.androidx.core)
+            implementation(libs.androidx.activity.compose)
+
             // Compose
             implementation(libs.compose.ui)
             implementation(libs.compose.ui.tooling.preview)
-            implementation(libs.androidx.activity.compose)
 
             // Koin
             implementation(libs.koin.androidx.compose)
