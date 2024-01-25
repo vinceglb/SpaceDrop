@@ -2,6 +2,7 @@ package com.vinceglb.spacedrop.di
 
 import com.vinceglb.spacedrop.ui.SendFileScreenModel
 import com.vinceglb.spacedrop.ui.screens.MainScreenModel
+import com.vinceglb.spacedrop.ui.screens.event.EventScreenModel
 import com.vinceglb.spacedrop.ui.screens.home.HomeScreenModel
 import com.vinceglb.spacedrop.ui.screens.login.LoginScreenModel
 import com.vinceglb.spacedrop.ui.screens.register.RegisterScreenModel
@@ -16,6 +17,7 @@ val composeModule = module {
     factoryOf(::RegisterScreenModel)
     factoryOf(::HomeScreenModel)
     factoryOf(::SendFileScreenModel)
+    factoryOf(::EventScreenModel)
 }
 
 expect val composePlatformModule: Module
