@@ -6,8 +6,12 @@ import com.vinceglb.spacedrop.data.settings.DeviceLocalDataSource
 import com.vinceglb.spacedrop.data.settings.EventLocalDataSource
 import com.vinceglb.spacedrop.data.supabase.EventRemoteDataSource
 import com.vinceglb.spacedrop.model.Event
-import com.vinceglb.spacedrop.model.EventCreateRequest
-import com.vinceglb.spacedrop.model.EventType
+import com.vinceglb.spacedrop.model.PingEvent
+import com.vinceglb.spacedrop.model.PingEventCreateRequest
+import com.vinceglb.spacedrop.model.TextEvent
+import com.vinceglb.spacedrop.model.TextEventCreateRequest
+import com.vinceglb.spacedrop.model.UrlEvent
+import com.vinceglb.spacedrop.model.UrlEventCreateRequest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,6 +43,8 @@ class EventRepository(
                 replay = 1,
             )
 
+    private val message: MutableStateFlow<String?> = MutableStateFlow(null)
+
     private val notificationEventId: MutableStateFlow<String?> = MutableStateFlow(null)
 
     fun getDeviceEvents(): Flow<List<Event>> =
@@ -46,6 +52,13 @@ class EventRepository(
 
     fun getNotificationEventId(): Flow<String?> =
         notificationEventId
+
+    fun getMessage(): Flow<String?> =
+        message
+
+    fun consumeMessage() {
+        message.value = null
+    }
 
     suspend fun executeEvent(eventId: String) {
         eventRemoteDataSource.getEvent(eventId)?.let { event ->
@@ -65,10 +78,35 @@ class EventRepository(
             ?: throw IllegalStateException("No device ID found")
 
         eventRemoteDataSource.createEvent(
-            EventCreateRequest(
-                type = EventType.NOTIFICATION,
+            PingEventCreateRequest(
                 sourceDeviceId = currentDeviceId,
                 destinationDeviceId = destinationDeviceId,
+            )
+        )
+    }
+
+    suspend fun sendTextEvent(destinationDeviceId: String, text: String) {
+        val currentDeviceId = deviceLocalDataSource.getDeviceId().firstOrNull()
+            ?: throw IllegalStateException("No device ID found")
+
+        eventRemoteDataSource.createEvent(
+            TextEventCreateRequest(
+                sourceDeviceId = currentDeviceId,
+                destinationDeviceId = destinationDeviceId,
+                text = text,
+            )
+        )
+    }
+
+    suspend fun sendUrlEvent(destinationDeviceId: String, url: String) {
+        val currentDeviceId = deviceLocalDataSource.getDeviceId().firstOrNull()
+            ?: throw IllegalStateException("No device ID found")
+
+        eventRemoteDataSource.createEvent(
+            UrlEventCreateRequest(
+                sourceDeviceId = currentDeviceId,
+                destinationDeviceId = destinationDeviceId,
+                url = url,
             )
         )
     }
@@ -95,8 +133,10 @@ class EventRepository(
             Logger.i(TAG) { "Executing event ${event.id}" }
 
             // Execute event
-            when (event.type) {
-                EventType.NOTIFICATION -> platformActionDataSource.sendNotification()
+            when (event) {
+                is PingEvent -> message.emit("Ping!")
+                is TextEvent -> platformActionDataSource.copyToClipboard(event.text)
+                is UrlEvent -> platformActionDataSource.openUrl(event.url)
             }
 
             // Delete event remotely

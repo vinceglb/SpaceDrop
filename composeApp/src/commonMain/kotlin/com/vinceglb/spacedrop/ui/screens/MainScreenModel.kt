@@ -18,7 +18,7 @@ class MainScreenModel(
     val uiState: StateFlow<MainState> = combine(
         authRepository.getCurrentUser(),
         deviceRepository.getCurrentDevice(),
-        eventRepository.getNotificationEventId(),
+        eventRepository.getNotificationEventId()
     ) { currentUser, currentDevice, notificationEventId ->
         MainState.Success(
             isLogged = currentUser != null,
@@ -37,6 +37,7 @@ sealed class MainState {
     data class Success(
         val isLogged: Boolean,
         val isRegistered: Boolean,
-        val notificationEventId: String?
+        val notificationEventId: String?,
+        val message: String? = null,
     ) : MainState()
 }

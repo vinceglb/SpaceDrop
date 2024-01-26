@@ -3,9 +3,14 @@ package com.vinceglb.spacedrop.data.platform
 import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -53,5 +58,24 @@ actual class PlatformActionDataSource(
         with(NotificationManagerCompat.from(context)) {
             notify(0, builder.build())
         }
+    }
+
+    actual fun copyToClipboard(text: String) {
+        // Copy to clipboard
+        val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("Copied from Teleport", text)
+        clipboardManager.setPrimaryClip(clip)
+
+        // Show Toast
+        Toast.makeText(context, "Copied to clipboard", Toast.LENGTH_SHORT).show()
+    }
+
+    actual fun openUrl(url: String) {
+        // Open url
+        val uri = Uri.parse(url)
+        val intent = Intent(Intent.ACTION_VIEW, uri).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        }
+        context.startActivity(intent)
     }
 }

@@ -26,13 +26,13 @@ class SpaceDropMessagingService : FirebaseMessagingService() {
         Logger.i(TAG) { "Message received from: ${message.from}" }
 
         // Check if message contains a data payload.
-        message.data.isNotEmpty().let {
-            val id = message.data["id"] ?: ""
-            applicationScope.launch {
-                Logger.i(TAG) { "Message data payload: $id / ${message.data}" }
-                eventRepository.executeEvents()
-            }
-        }
+//        message.data.isNotEmpty().let {
+//            val id = message.data["id"] ?: ""
+//            applicationScope.launch {
+//                Logger.i(TAG) { "Message data payload: $id / ${message.data}" }
+//                eventRepository.executeEvents()
+//            }
+//        }
     }
 
     companion object {
