@@ -23,7 +23,8 @@ class HomeScreenModel(
         deviceRepository.getCurrentDevice(),
         deviceRepository.getDevices(),
         eventRepository.getDeviceEvents(),
-    ) { currentUser, currentDevice, devices, events ->
+        eventRepository.getMessage(),
+    ) { currentUser, currentDevice, devices, events, message ->
         if (events.isNotEmpty()) {
             eventRepository.executeEvents()
         }
@@ -32,6 +33,7 @@ class HomeScreenModel(
             currentUser = currentUser,
             currentDevice = currentDevice,
             devices = devices,
+            message = message,
         )
     }.stateIn(
         scope = screenModelScope,
@@ -57,9 +59,25 @@ class HomeScreenModel(
         }
     }
 
-    fun sendNotificationEvent(destinationDeviceId: String) {
+    fun sendNotificationEvent(destinationDeviceId: String, text: String) {
         screenModelScope.launch {
-            eventRepository.sendNotificationEvent(destinationDeviceId)
+            if (text.isNotBlank()) {
+                // Check if the text is a URL
+                val urlRegex = Regex("https?://\\S+")
+                if (urlRegex.matches(text)) {
+                    eventRepository.sendUrlEvent(destinationDeviceId, text)
+                } else {
+                    eventRepository.sendTextEvent(destinationDeviceId, text)
+                }
+            } else {
+                eventRepository.sendNotificationEvent(destinationDeviceId)
+            }
+        }
+    }
+
+    fun consumeMessage() {
+        screenModelScope.launch {
+            eventRepository.consumeMessage()
         }
     }
 }
@@ -68,4 +86,5 @@ data class HomeScreenUiState(
     val currentUser: AuthUser? = null,
     val currentDevice: Device? = null,
     val devices: List<Device> = emptyList(),
+    val message: String? = null,
 )

@@ -72,6 +72,9 @@ kotlin {
             implementation(project.dependencies.platform(libs.firebase.bom))
             implementation(libs.firebase.analytics.ktx)
             implementation(libs.firebase.messaging.ktx)
+
+            // TODO Workaround for https://github.com/JetBrains/compose-multiplatform/issues/4157
+            implementation("androidx.compose.material3:material3:1.2.0-rc01")
         }
 
         desktopMain.dependencies {
