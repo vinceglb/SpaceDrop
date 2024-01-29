@@ -15,10 +15,10 @@ kotlin {
             }
         }
     }
-    
+
     jvm("desktop")
     jvmToolchain(17)
-    
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -32,7 +32,7 @@ kotlin {
 
     sourceSets {
         val desktopMain by getting
-        
+
         commonMain.dependencies {
             implementation(projects.shared)
 
@@ -52,7 +52,7 @@ kotlin {
             // File picker
             implementation(libs.mpFilePicker)
         }
-        
+
         androidMain.dependencies {
             // AndroidX
             implementation(libs.androidx.core)

@@ -42,7 +42,13 @@ fun main() = application {
     }
 
     // Launch app
-    Window(onCloseRequest = ::exitApplication) {
+    Window(
+        onCloseRequest = ::exitApplication,
+    ) {
+        window.rootPane.putClientProperty("apple.awt.fullWindowContent", true)
+        window.rootPane.putClientProperty("apple.awt.transparentTitleBar", true)
+        window.rootPane.putClientProperty("apple.awt.windowTitleVisible", false)
+
         KoinApplication(
             application = {
                 startAppKoin(
