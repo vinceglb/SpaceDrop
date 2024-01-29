@@ -135,8 +135,22 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.vinceglb.spacedrop"
+            packageName = "SpaceDrop"
             packageVersion = "1.0.0"
+
+            macOS {
+                iconFile.set(rootProject.file("icons/AppIcon.icns"))
+                infoPlist {
+                    extraKeysRawXml = """
+                        <key>LSUIElement</key>
+                        <true/>
+                    """.trimIndent()
+                }
+            }
+
+            windows {
+                iconFile.set(rootProject.file("icons/AppIcon.ico"))
+            }
         }
     }
 }
