@@ -1,53 +1,70 @@
 package com.vinceglb.spacedrop
 
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.window.Notification
 import androidx.compose.ui.window.Tray
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberTrayState
+import androidx.compose.ui.window.rememberWindowState
 import com.vinceglb.spacedrop.di.composeModule
 import com.vinceglb.spacedrop.di.composePlatformModule
 import com.vinceglb.spacedrop.di.desktopModule
 import com.vinceglb.spacedrop.di.startAppKoin
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.KoinApplication
+import spacedrop.composeapp.generated.resources.Res
+import java.awt.Window
 
+@OptIn(ExperimentalResourceApi::class)
 fun main() = application {
+    var isWindowVisible by remember { mutableStateOf(true) }
+    val windowState = rememberWindowState()
+    var appWindow: Window? = null
+
     val trayState = rememberTrayState()
+    val sendNotification = remember {
+        { title: String, message: String ->
+            trayState.sendNotification(Notification(title = title, message = message))
+        }
+    }
 
     Tray(
         state = trayState,
-        icon = TrayIcon,
+        icon = painterResource(Res.drawable.tray_icon),
         menu = {
             Item(
-                "Send notification",
+                "Open SpaceDrop",
                 onClick = {
-                    trayState.sendNotification(
-                        Notification(
-                            title = "Hello",
-                            message = "World!",
-                            type = Notification.Type.Info
-                        )
-                    )
-                }
+                    isWindowVisible = true
+                    appWindow?.toFront()
+                },
+            )
+
+            Item(
+                "Quit",
+                onClick = ::exitApplication,
             )
         }
     )
 
-    val sendNotification = { title: String, message: String ->
-        trayState.sendNotification(Notification(title = title, message = message))
-    }
-
     // Launch app
     Window(
-        onCloseRequest = ::exitApplication,
+        title = "SpaceDrop",
+        state = windowState,
+        visible = isWindowVisible,
+        onCloseRequest = { isWindowVisible = false },
     ) {
-        window.rootPane.putClientProperty("apple.awt.fullWindowContent", true)
-        window.rootPane.putClientProperty("apple.awt.transparentTitleBar", true)
-        window.rootPane.putClientProperty("apple.awt.windowTitleVisible", false)
+        window.apply {
+            appWindow = this
+            rootPane.putClientProperty("apple.awt.fullWindowContent", true)
+            rootPane.putClientProperty("apple.awt.transparentTitleBar", true)
+            rootPane.putClientProperty("apple.awt.windowTitleVisible", false)
+        }
 
         KoinApplication(
             application = {
@@ -63,12 +80,5 @@ fun main() = application {
             App()
         }
     }
-}
 
-object TrayIcon : Painter() {
-    override val intrinsicSize = Size(256f, 256f)
-
-    override fun DrawScope.onDraw() {
-        drawOval(Color(0xFFFFA500))
-    }
 }
