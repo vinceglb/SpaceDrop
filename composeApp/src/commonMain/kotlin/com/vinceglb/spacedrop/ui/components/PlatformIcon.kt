@@ -5,10 +5,10 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.vinceglb.spacedrop.composeapp.generated.resources.Res
 import com.vinceglb.spacedrop.model.Platform
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import spacedrop.composeapp.generated.resources.Res
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
