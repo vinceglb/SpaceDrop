@@ -1,3 +1,6 @@
+import com.android.build.gradle.internal.lint.AndroidLintAnalysisTask
+import com.android.build.gradle.internal.lint.LintModelWriterTask
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
@@ -7,7 +10,7 @@ plugins {
 }
 
 group = "com.vinceglb.spacedrop"
-version = "0.2.0"
+version = "0.1.0"
 
 kotlin {
     androidTarget {
@@ -87,16 +90,16 @@ android {
     namespace = "com.vinceglb.spacedrop"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
-//    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-//    sourceSets["main"].res.srcDirs("src/androidMain/res")
-//    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
+    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    sourceSets["main"].res.srcDirs("src/androidMain/res")
+    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     defaultConfig {
         applicationId = "com.vinceglb.spacedrop"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
-        versionName = "1.0"
+        versionName = "0.1"
     }
 
     buildFeatures {
@@ -128,6 +131,16 @@ android {
         debugImplementation(libs.compose.ui.tooling)
     }
 }
+
+// region TODO workaround https://github.com/JetBrains/compose-multiplatform/issues/4085
+tasks.withType<AndroidLintAnalysisTask>{
+    dependsOn("copyFontsToAndroidAssets")
+}
+
+tasks.withType<LintModelWriterTask>{
+    dependsOn("copyFontsToAndroidAssets")
+}
+// endregion
 
 compose.desktop {
     application {
