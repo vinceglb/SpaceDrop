@@ -57,7 +57,7 @@
             
         <style xml:space="preserve"> @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700'); </style>
             
-        <text lengthAdjust="spacingAndGlyphs" x="50%" y="720" style="font: bold 580px 'Poppins', sans-serif" textLength="64%" text-anchor="middle">XY</text>
+        <text lengthAdjust="spacingAndGlyphs" x="50%" y="720" style="font: bold 580px 'Poppins', sans-serif" textLength="64%" text-anchor="middle">SD</text>
         
       </svg>
     </g>
