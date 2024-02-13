@@ -1,11 +1,13 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.googleServices)
+    alias(libs.plugins.conveyor)
 }
+
+group = "com.vinceglb.spacedrop"
+version = "0.2.0"
 
 kotlin {
     androidTarget {
@@ -16,7 +18,7 @@ kotlin {
         }
     }
 
-    jvm("desktop")
+    jvm(/*"desktop"*/)
     jvmToolchain(17)
 
     listOf(
@@ -31,7 +33,7 @@ kotlin {
     }
 
     sourceSets {
-        val desktopMain by getting
+        // val desktopMain by getting
 
         commonMain.dependencies {
             implementation(projects.shared)
@@ -40,6 +42,7 @@ kotlin {
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
+            // @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
             implementation(compose.components.resources)
 
             // Koin
@@ -72,12 +75,9 @@ kotlin {
             implementation(project.dependencies.platform(libs.firebase.bom))
             implementation(libs.firebase.analytics.ktx)
             implementation(libs.firebase.messaging.ktx)
-
-            // TODO Workaround for https://github.com/JetBrains/compose-multiplatform/issues/4157
-            implementation("androidx.compose.material3:material3:1.2.0-rc01")
         }
 
-        desktopMain.dependencies {
+        jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
         }
     }
@@ -87,9 +87,9 @@ android {
     namespace = "com.vinceglb.spacedrop"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    sourceSets["main"].res.srcDirs("src/androidMain/res")
-    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
+//    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+//    sourceSets["main"].res.srcDirs("src/androidMain/res")
+//    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     defaultConfig {
         applicationId = "com.vinceglb.spacedrop"
@@ -133,24 +133,39 @@ compose.desktop {
     application {
         mainClass = "com.vinceglb.spacedrop.MainKt"
 
-        nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "SpaceDrop"
-            packageVersion = "1.0.0"
-
-            macOS {
-                iconFile.set(rootProject.file("icons/AppIcon.icns"))
-                infoPlist {
-                    extraKeysRawXml = """
-                        <key>LSUIElement</key>
-                        <true/>
-                    """.trimIndent()
-                }
-            }
-
-            windows {
-                iconFile.set(rootProject.file("icons/AppIcon.ico"))
-            }
-        }
+//        nativeDistributions {
+//            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+//            packageName = "SpaceDrop"
+//            packageVersion = "1.0.0"
+//
+//            macOS {
+//                iconFile.set(rootProject.file("icons/AppIcon.icns"))
+//                infoPlist {
+//                    extraKeysRawXml = """
+//                        <key>LSUIElement</key>
+//                        <true/>
+//                    """.trimIndent()
+//                }
+//            }
+//
+//            windows {
+//                iconFile.set(rootProject.file("icons/AppIcon.ico"))
+//            }
+//        }
     }
 }
+
+dependencies {
+    linuxAmd64(compose.desktop.linux_x64)
+    macAmd64(compose.desktop.macos_x64)
+    macAarch64(compose.desktop.macos_arm64)
+    windowsAmd64(compose.desktop.windows_x64)
+}
+
+// region Work around temporary Compose bugs.
+configurations.all {
+    attributes {
+        attribute(Attribute.of("ui", String::class.java), "awt")
+    }
+}
+// endregion

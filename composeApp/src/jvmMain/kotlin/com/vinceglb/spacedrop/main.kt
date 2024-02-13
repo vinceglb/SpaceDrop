@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.window.Notification
 import androidx.compose.ui.window.Tray
 import androidx.compose.ui.window.Window
@@ -14,13 +15,9 @@ import com.vinceglb.spacedrop.di.composeModule
 import com.vinceglb.spacedrop.di.composePlatformModule
 import com.vinceglb.spacedrop.di.desktopModule
 import com.vinceglb.spacedrop.di.startAppKoin
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.KoinApplication
-import spacedrop.composeapp.generated.resources.Res
 import java.awt.Window
 
-@OptIn(ExperimentalResourceApi::class)
 fun main() = application {
     var isWindowVisible by remember { mutableStateOf(true) }
     val windowState = rememberWindowState()
@@ -35,7 +32,7 @@ fun main() = application {
 
     Tray(
         state = trayState,
-        icon = painterResource(Res.drawable.tray_icon),
+        icon = painterResource("drawable/tray_icon.png"), // org.jetbrains.compose.resources.painterResource(Res.drawable.tray_icon), //
         menu = {
             Item(
                 "Open SpaceDrop",
@@ -80,5 +77,4 @@ fun main() = application {
             App()
         }
     }
-
 }
