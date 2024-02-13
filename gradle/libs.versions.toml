@@ -25,6 +25,7 @@ mp-file-picker = "3.0.0"
 multiplatform-settings = "1.1.1"
 skie = "0.6.1"
 slf4jSimple = "2.0.11"
+statelyCommon = "2.0.6"
 supabase = "2.0.4"
 voyager = "1.1.0-alpha02"
 
@@ -56,6 +57,7 @@ multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", vers
 multiplatform-settings-coroutines = { module = "com.russhwolf:multiplatform-settings-coroutines", version.ref = "multiplatform-settings" }
 skie-annotations = { module = "co.touchlab.skie:configuration-annotations", version.ref = "skie" }
 slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4jSimple" }
+stately-common = { module = "co.touchlab:stately-common", version.ref = "statelyCommon" }
 supabase-auth = { module = "io.github.jan-tennert.supabase:compose-auth", version.ref = "supabase" }
 supabase-gotrue = { module = "io.github.jan-tennert.supabase:gotrue-kt", version.ref = "supabase" }
 supabase-postgrest = { module = "io.github.jan-tennert.supabase:postgrest-kt", version.ref = "supabase" }

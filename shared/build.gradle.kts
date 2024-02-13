@@ -76,6 +76,10 @@ kotlin {
 
             // Ktor
             implementation(libs.ktor.client.darwin)
+
+            // Fix for Koin
+            // https://github.com/cashapp/sqldelight/issues/4357#issuecomment-1839905700
+            implementation(libs.stately.common)
         }
 
         androidMain.dependencies {
