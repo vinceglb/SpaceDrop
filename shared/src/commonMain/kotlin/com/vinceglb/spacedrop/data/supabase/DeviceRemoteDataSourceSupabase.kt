@@ -4,19 +4,16 @@ import co.touchlab.kermit.Logger
 import com.vinceglb.spacedrop.data.repository.AuthRepository
 import com.vinceglb.spacedrop.model.Device
 import com.vinceglb.spacedrop.model.DeviceCreateRequest
+import io.github.jan.supabase.annotations.SupabaseExperimental
 import io.github.jan.supabase.postgrest.Postgrest
-import io.github.jan.supabase.postgrest.query.Order
-import io.github.jan.supabase.realtime.PostgresAction
 import io.github.jan.supabase.realtime.Realtime
 import io.github.jan.supabase.realtime.channel
-import io.github.jan.supabase.realtime.postgresChangeFlow
+import io.github.jan.supabase.realtime.postgresListDataFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -51,32 +48,22 @@ class DeviceRemoteDataSourceSupabase(
     private val devicesChannel = realtime.channel("devices-realtime")
 
     @Suppress("RemoveExplicitTypeArguments")
-    @OptIn(ExperimentalCoroutinesApi::class)
+    @OptIn(ExperimentalCoroutinesApi::class, SupabaseExperimental::class)
     private val devices: SharedFlow<List<Device>> = authRepository
         .getCurrentUser()
         .flatMapLatest { user ->
             when (user) {
                 null -> flow { emit(emptyList<Device>()) }
-                else -> flow {
-                    // Emit an initial value
-                    emit(fetchDevices())
-
-                    // TODO improve this
-                    // Wait 1 second to avoid conflicts EventRemoteDataSourceSupabase
-                    delay(1_000)
-
-                    // Subscribe to changes
-                    emitAll(
-                        devicesChannel
-                            .postgresChangeFlow<PostgresAction>(schema = "public") { table = deviceTableName }
-                            .map { fetchDevices() }
-                            .onStart { devicesChannel.subscribe() }
-                            .onCompletion { devicesChannel.unsubscribe() }
-                    )
-                }
+                else -> devicesChannel.postgresListDataFlow(
+                    table = deviceTableName,
+                    primaryKey = Device::id,
+                )
+                    .map { devices -> devices.sortedByDescending { it.lastSeen } }
+                    .onStart { devicesChannel.subscribe() }
+                    .onCompletion { devicesChannel.unsubscribe() }
             }
         }
-        .onEach { Logger.i("DeviceRemoteDataSourceSupabase") { "Devices: ${it.map { it.name }}" } }
+        .onEach { Logger.i(TAG) { "Devices: ${it.map { it.name }}" } }
         .shareIn(
             scope = applicationScope,
             replay = 1,
@@ -111,8 +98,7 @@ class DeviceRemoteDataSourceSupabase(
             .update({ Device::fcmToken setTo token }) { filter { Device::id eq deviceId } }
             .decodeSingle<Device>()
 
-    private suspend fun fetchDevices(): List<Device> =
-        devicesTable
-            .select { order("name", Order.ASCENDING) }
-            .decodeList()
+    companion object {
+        private const val TAG = "DeviceRemoteDataSourceSupabase"
+    }
 }
