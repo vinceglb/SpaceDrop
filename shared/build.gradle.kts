@@ -95,6 +95,14 @@ kotlin {
                 optIn("kotlinx.cinterop.ExperimentalForeignApi")
             }
         }
+
+        targets.all {
+            compilations.all {
+                compilerOptions.configure {
+                    freeCompilerArgs.add("-Xexpect-actual-classes")
+                }
+            }
+        }
     }
 }
 

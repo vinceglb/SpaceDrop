@@ -1,6 +1,3 @@
-import com.android.build.gradle.internal.lint.AndroidLintAnalysisTask
-import com.android.build.gradle.internal.lint.LintModelWriterTask
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
@@ -90,9 +87,9 @@ android {
     namespace = "com.vinceglb.spacedrop"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    sourceSets["main"].res.srcDirs("src/androidMain/res")
-    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
+//    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+//    sourceSets["main"].res.srcDirs("src/androidMain/res")
+//    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     defaultConfig {
         applicationId = "com.vinceglb.spacedrop"
@@ -132,16 +129,6 @@ android {
     }
 }
 
-// region TODO workaround https://github.com/JetBrains/compose-multiplatform/issues/4085
-tasks.withType<AndroidLintAnalysisTask>{
-    dependsOn("copyFontsToAndroidAssets")
-}
-
-tasks.withType<LintModelWriterTask>{
-    dependsOn("copyFontsToAndroidAssets")
-}
-// endregion
-
 compose.desktop {
     application {
         mainClass = "com.vinceglb.spacedrop.MainKt"
@@ -168,6 +155,9 @@ compose.desktop {
     }
 }
 
+// region Conveyor Gradle config
+// https://conveyor.hydraulic.dev/13.1/tutorial/tortoise/2-gradle/#adapting-a-compose-desktop-app
+
 dependencies {
     linuxAmd64(compose.desktop.linux_x64)
     macAmd64(compose.desktop.macos_x64)
@@ -175,7 +165,7 @@ dependencies {
     windowsAmd64(compose.desktop.windows_x64)
 }
 
-// region Work around temporary Compose bugs.
+// Work around temporary Compose bugs.
 configurations.all {
     attributes {
         attribute(Attribute.of("ui", String::class.java), "awt")
