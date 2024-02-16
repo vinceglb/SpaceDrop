@@ -19,6 +19,7 @@ import com.vinceglb.spacedrop.ui.screens.login.LoginScreen
 import com.vinceglb.spacedrop.ui.screens.permission.PermissionScreen
 import com.vinceglb.spacedrop.ui.screens.permission.isAllPermissionsGranted
 import com.vinceglb.spacedrop.ui.screens.register.RegisterScreen
+import com.vinceglb.spacedrop.ui.screens.secret.SecretScreen
 
 object MainScreen : Screen {
     @Composable
@@ -35,6 +36,9 @@ object MainScreen : Screen {
                     when  {
                         // Redirect to LoginScreen if not logged
                         !state.isLogged -> navigator.replaceAll(LoginScreen)
+
+                        // Redirect to SecretScreen if not hasSecret
+                        !state.hasSecret -> navigator.replaceAll(SecretScreen)
 
                         // Redirect to RegisterScreen if logged and not registered
                         !state.isRegistered -> navigator.replaceAll(RegisterScreen)

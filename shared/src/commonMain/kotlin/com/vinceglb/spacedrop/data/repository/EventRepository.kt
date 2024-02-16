@@ -28,6 +28,7 @@ class EventRepository(
     private val eventLocalDataSource: EventLocalDataSource,
     private val eventRemoteDataSource: EventRemoteDataSource,
     private val platformActionDataSource: PlatformActionDataSource,
+    private val secretRepository: SecretRepository,
 ) {
     private val deviceEvents: SharedFlow<List<Event>> =
         combine(
@@ -89,11 +90,13 @@ class EventRepository(
         val currentDeviceId = deviceLocalDataSource.getDeviceId().firstOrNull()
             ?: throw IllegalStateException("No device ID found")
 
+        val encryptedMessage = secretRepository.encryptMessage(text)
+
         eventRemoteDataSource.createEvent(
             TextEventCreateRequest(
                 sourceDeviceId = currentDeviceId,
                 destinationDeviceId = destinationDeviceId,
-                text = text,
+                text = encryptedMessage,
             )
         )
     }
@@ -102,11 +105,13 @@ class EventRepository(
         val currentDeviceId = deviceLocalDataSource.getDeviceId().firstOrNull()
             ?: throw IllegalStateException("No device ID found")
 
+        val encryptedUrl = secretRepository.encryptMessage(url)
+
         eventRemoteDataSource.createEvent(
             UrlEventCreateRequest(
                 sourceDeviceId = currentDeviceId,
                 destinationDeviceId = destinationDeviceId,
-                url = url,
+                url = encryptedUrl,
             )
         )
     }
@@ -135,8 +140,14 @@ class EventRepository(
             // Execute event
             when (event) {
                 is PingEvent -> message.emit("Ping!")
-                is TextEvent -> platformActionDataSource.copyToClipboard(event.text)
-                is UrlEvent -> platformActionDataSource.openUrl(event.url)
+                is TextEvent -> {
+                    val decryptedMessage = secretRepository.decryptMessage(event.text)
+                    platformActionDataSource.copyToClipboard(decryptedMessage)
+                }
+                is UrlEvent -> {
+                    val decryptedUrl = secretRepository.decryptMessage(event.url)
+                    platformActionDataSource.openUrl(decryptedUrl)
+                }
             }
 
             // Delete event remotely

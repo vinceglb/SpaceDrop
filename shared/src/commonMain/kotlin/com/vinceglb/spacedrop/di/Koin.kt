@@ -65,13 +65,16 @@ val commonModule = module {
     singleOf(::AuthRepository)
     singleOf(::DeviceRepository)
     singleOf(::EventRepository)
+    singleOf(::SecretRepository)
 
     // DataSources
     factoryOf(::AuthUserRemoteDataSource)
     factoryOf(::DeviceLocalDataSourcePreferences) { bind<DeviceLocalDataSource>() }
     factoryOf(::EventLocalDataSourcePreferences) { bind<EventLocalDataSource>() }
+    factoryOf(::SecretLocalDataSourcePreferences) { bind<SecretLocalDataSource>() }
     factoryOf(::DeviceRemoteDataSourceSupabase) { bind<DeviceRemoteDataSource>() }
     factoryOf(::EventRemoteDataSourceSupabase) { bind<EventRemoteDataSource>() }
+    factoryOf(::SecretRemoteDataSourceSupabase) { bind<SecretRemoteDataSource>() }
 
     // Supabase
     single {

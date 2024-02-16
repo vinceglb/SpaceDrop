@@ -80,4 +80,80 @@ fun main() = application {
             App()
         }
     }
+
+//    LaunchedEffect(Unit) {
+//        LibsodiumInitializer.initialize()
+//
+//        val message = "Hello, World!".encodeToUByteArray()
+//
+//        val aliceKeyPair = Box.keypair()
+//        val bobKeyPair = Box.keypair()
+//
+//        val messageNonce = Random(0).nextUBytes(crypto_box_NONCEBYTES)
+//
+//        val encrypted = Box.easy(
+//            message = message,
+//            nonce = messageNonce,
+//            recipientsPublicKey = bobKeyPair.publicKey,
+//            sendersSecretKey = aliceKeyPair.secretKey,
+//        )
+//
+//        val sharedKey = Box.beforeNM(
+//            publicKey = bobKeyPair.publicKey,
+//            secretKey = aliceKeyPair.secretKey
+//        )
+//
+//        val res = Box.openEasyAfterNM(
+//            ciphertext = encrypted,
+//            nonce = messageNonce,
+//            precomputedKey = sharedKey,
+//        )
+//
+//        Logger.d { "Encrypted message: ${encrypted.toHexString()}" }
+//
+//        val decrypted = Box.openEasy(
+//            ciphertext = encrypted,
+//            nonce = messageNonce,
+//            sendersPublicKey = aliceKeyPair.publicKey,
+//            recipientsSecretKey = bobKeyPair.secretKey,
+//        )
+//
+//        Logger.d { "Decrypted message: ${decrypted.decodeFromUByteArray()}" }
+//        Logger.d { "Decrypted message Res: ${res.decodeFromUByteArray()}" }
+//
+//        val encrypted2 = Box.seal(
+//            message = message,
+//            recipientsPublicKey = bobKeyPair.publicKey
+//        )
+//
+//        Logger.d { "Encrypted message 2: ${encrypted2.toHexString()}" }
+//
+//        val decrypted2 = Box.sealOpen(
+//            ciphertext = encrypted2,
+//            recipientsPublicKey = bobKeyPair.publicKey,
+//            recipientsSecretKey = bobKeyPair.secretKey
+//        )
+//
+//        Logger.d { "Decrypted message 2: ${decrypted2.decodeFromUByteArray()}" }
+//
+//        val password = "Test1234"
+//        val salt = "vince".encodeToUByteArray() // LibsodiumRandom.buf(crypto_pwhash_SALTBYTES)
+//
+//        val passwordHash = PasswordHash.pwhash(
+//            outputLength = 16,
+//            password = password,
+//            salt = salt,
+//            opsLimit = crypto_pwhash_OPSLIMIT_INTERACTIVE.toULong(),
+//            memLimit = crypto_pwhash_MEMLIMIT_INTERACTIVE,
+//            algorithm = crypto_pwhash_ALG_DEFAULT,
+//        )
+//
+//        // ce3b7b978b3c5f11e9dbd96f2e6f5961
+//        Logger.d { "Password hash: ${passwordHash.toHexString()}" }
+//
+////        PasswordHash.
+//
+//        // val masterKey = Kdf.keygen()
+//        // Kdf.
+//    }
 }
