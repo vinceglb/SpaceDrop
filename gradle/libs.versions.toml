@@ -23,6 +23,7 @@ kotlinx-coroutines = "1.8.0-RC2"
 ktor = "2.3.8"
 mp-file-picker = "3.1.0"
 multiplatform-settings = "1.1.1"
+libsodium = "0.9.0"
 skie = "0.6.1"
 slf4jSimple = "2.0.12"
 statelyCommon = "2.0.6"
@@ -53,6 +54,7 @@ ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 mpFilePicker = { module = "com.darkrockstudios:mpfilepicker", version.ref = "mp-file-picker" }
+libsodium-kotlin = { module = "com.ionspin.kotlin:multiplatform-crypto-libsodium-bindings", version.ref = "libsodium" }
 multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatform-settings" }
 multiplatform-settings-coroutines = { module = "com.russhwolf:multiplatform-settings-coroutines", version.ref = "multiplatform-settings" }
 skie-annotations = { module = "co.touchlab.skie:configuration-annotations", version.ref = "skie" }

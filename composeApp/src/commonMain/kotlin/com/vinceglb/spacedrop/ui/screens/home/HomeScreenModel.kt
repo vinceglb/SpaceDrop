@@ -5,6 +5,7 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import com.vinceglb.spacedrop.data.repository.AuthRepository
 import com.vinceglb.spacedrop.data.repository.DeviceRepository
 import com.vinceglb.spacedrop.data.repository.EventRepository
+import com.vinceglb.spacedrop.data.repository.SecretRepository
 import com.vinceglb.spacedrop.model.AuthUser
 import com.vinceglb.spacedrop.model.Device
 import kotlinx.coroutines.flow.SharingStarted
@@ -17,6 +18,7 @@ class HomeScreenModel(
     private val authRepository: AuthRepository,
     private val deviceRepository: DeviceRepository,
     private val eventRepository: EventRepository,
+    private val secretRepository: SecretRepository,
 ) : ScreenModel {
     val uiState: StateFlow<HomeScreenUiState> = combine(
         authRepository.getCurrentUser(),
@@ -43,7 +45,7 @@ class HomeScreenModel(
 
     fun signOut() {
         screenModelScope.launch {
-            authRepository.signOut()
+            secretRepository.logout()
         }
     }
 

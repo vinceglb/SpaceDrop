@@ -5,6 +5,7 @@ import cafe.adriel.voyager.core.model.screenModelScope
 import com.vinceglb.spacedrop.data.repository.AuthRepository
 import com.vinceglb.spacedrop.data.repository.DeviceRepository
 import com.vinceglb.spacedrop.data.repository.EventRepository
+import com.vinceglb.spacedrop.data.repository.SecretRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -14,14 +15,17 @@ class MainScreenModel(
     authRepository: AuthRepository,
     eventRepository: EventRepository,
     deviceRepository: DeviceRepository,
+    secretRepository: SecretRepository,
 ) : ScreenModel {
     val uiState: StateFlow<MainState> = combine(
         authRepository.getCurrentUser(),
         deviceRepository.getCurrentDevice(),
-        eventRepository.getNotificationEventId()
-    ) { currentUser, currentDevice, notificationEventId ->
+        eventRepository.getNotificationEventId(),
+        secretRepository.getKeyPair(),
+    ) { currentUser, currentDevice, notificationEventId, keyPair ->
         MainState.Success(
             isLogged = currentUser != null,
+            hasSecret = keyPair != null,
             isRegistered = currentDevice != null,
             notificationEventId = notificationEventId,
         )
@@ -36,6 +40,7 @@ sealed class MainState {
     data object Loading : MainState()
     data class Success(
         val isLogged: Boolean,
+        val hasSecret: Boolean,
         val isRegistered: Boolean,
         val notificationEventId: String?,
         val message: String? = null,
