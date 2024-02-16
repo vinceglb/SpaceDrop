@@ -57,6 +57,9 @@ kotlin {
             // Logger
             api(libs.kermit)
             implementation(libs.kermit.koin)
+
+            // Libsodium
+            implementation(libs.libsodium.kotlin)
         }
 
         jvmMain.dependencies {
@@ -128,6 +131,11 @@ buildkonfig {
             STRING,
             "SupabaseKey",
             gradleLocalProperties(project.rootDir).getProperty("SUPABASE_KEY")
+        )
+        buildConfigField(
+            STRING,
+            "GoogleClientId",
+            gradleLocalProperties(project.rootDir).getProperty("GOOGLE_CLIENT_ID")
         )
     }
 }

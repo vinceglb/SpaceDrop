@@ -6,16 +6,21 @@ import com.russhwolf.settings.ExperimentalSettingsApi
 import com.vinceglb.spacedrop.data.repository.AuthRepository
 import com.vinceglb.spacedrop.data.repository.DeviceRepository
 import com.vinceglb.spacedrop.data.repository.EventRepository
+import com.vinceglb.spacedrop.data.repository.SecretRepository
 import com.vinceglb.spacedrop.data.settings.DeviceLocalDataSource
 import com.vinceglb.spacedrop.data.settings.DeviceLocalDataSourcePreferences
 import com.vinceglb.spacedrop.data.settings.EventLocalDataSource
 import com.vinceglb.spacedrop.data.settings.EventLocalDataSourcePreferences
+import com.vinceglb.spacedrop.data.settings.SecretLocalDataSource
+import com.vinceglb.spacedrop.data.settings.SecretLocalDataSourcePreferences
 import com.vinceglb.spacedrop.data.settings.SettingsFactory
 import com.vinceglb.spacedrop.data.supabase.AuthUserRemoteDataSource
 import com.vinceglb.spacedrop.data.supabase.DeviceRemoteDataSource
 import com.vinceglb.spacedrop.data.supabase.DeviceRemoteDataSourceSupabase
 import com.vinceglb.spacedrop.data.supabase.EventRemoteDataSource
 import com.vinceglb.spacedrop.data.supabase.EventRemoteDataSourceSupabase
+import com.vinceglb.spacedrop.data.supabase.SecretRemoteDataSource
+import com.vinceglb.spacedrop.data.supabase.SecretRemoteDataSourceSupabase
 import com.vinceglb.spacedrop.shared.SupabaseKeyConfig
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.compose.auth.ComposeAuth
@@ -86,7 +91,7 @@ val commonModule = module {
 
             install(ComposeAuth) {
                 appleNativeLogin()
-                googleNativeLogin(serverClientId = "1072436209813-b9glgs6fsj6srj2g5lm23k48to59ft6p.apps.googleusercontent.com")
+                googleNativeLogin(serverClientId = SupabaseKeyConfig.GoogleClientId)
             }
 
             install(Storage)
