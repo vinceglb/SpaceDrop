@@ -42,7 +42,7 @@ kotlin {
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
-            // @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+            implementation(compose.ui)
             implementation(compose.components.resources)
 
             // Koin
