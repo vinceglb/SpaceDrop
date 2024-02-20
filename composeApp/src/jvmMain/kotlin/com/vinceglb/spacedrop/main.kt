@@ -11,6 +11,7 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberTrayState
 import androidx.compose.ui.window.rememberWindowState
 import com.vinceglb.spacedrop.composeapp.generated.resources.Res
+import com.vinceglb.spacedrop.composeapp.generated.resources.tray_icon
 import com.vinceglb.spacedrop.di.composeModule
 import com.vinceglb.spacedrop.di.composePlatformModule
 import com.vinceglb.spacedrop.di.desktopModule
