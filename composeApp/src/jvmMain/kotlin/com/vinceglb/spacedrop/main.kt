@@ -1,5 +1,6 @@
 package com.vinceglb.spacedrop
 
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -16,6 +17,7 @@ import com.vinceglb.spacedrop.di.composeModule
 import com.vinceglb.spacedrop.di.composePlatformModule
 import com.vinceglb.spacedrop.di.desktopModule
 import com.vinceglb.spacedrop.di.startAppKoin
+import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.KoinApplication
@@ -25,7 +27,8 @@ import java.awt.Window
 fun main() = application {
     var isWindowVisible by remember { mutableStateOf(true) }
     val windowState = rememberWindowState()
-    var appWindow: Window? = null
+    var appWindow: Window? by remember { mutableStateOf(null) }
+    var focus by remember { mutableStateOf(false) }
 
     val trayState = rememberTrayState()
     val sendNotification = remember {
@@ -36,13 +39,13 @@ fun main() = application {
 
     Tray(
         state = trayState,
-        icon =  painterResource(Res.drawable.tray_icon),
+        icon = painterResource(Res.drawable.tray_icon),
         menu = {
             Item(
                 "Open SpaceDrop",
                 onClick = {
                     isWindowVisible = true
-                    appWindow?.toFront()
+                    focus = true
                 },
             )
 
@@ -58,6 +61,7 @@ fun main() = application {
         title = "SpaceDrop",
         state = windowState,
         visible = isWindowVisible,
+        alwaysOnTop = focus,
         onCloseRequest = { isWindowVisible = false },
     ) {
         window.apply {
@@ -79,6 +83,15 @@ fun main() = application {
             }
         ) {
             App()
+        }
+    }
+
+    LaunchedEffect(focus) {
+        if (focus) {
+            delay(1200)
+            appWindow?.toFront()
+            delay(1200)
+            focus = false
         }
     }
 
