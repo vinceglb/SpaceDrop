@@ -6,6 +6,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.vinceglb.spacedrop.composeapp.generated.resources.Res
+import com.vinceglb.spacedrop.composeapp.generated.resources.android_logo
+import com.vinceglb.spacedrop.composeapp.generated.resources.apple_logo
+import com.vinceglb.spacedrop.composeapp.generated.resources.linux_logo
+import com.vinceglb.spacedrop.composeapp.generated.resources.windows_logo
 import com.vinceglb.spacedrop.model.Platform
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
