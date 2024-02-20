@@ -26,6 +26,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -36,8 +37,8 @@ class SecretRepository(
     private val authRepository: AuthRepository,
     private val applicationScope: CoroutineScope,
 ) {
-    fun getKeyPair(): Flow<BoxKeyPair?> =
-        secretLocalDataSource.getSecret()
+    fun hasSecret(): Flow<Boolean> =
+        secretLocalDataSource.getSecret().map { it != null }
 
     suspend fun fetchSecret(): Secret? {
         return authRepository.getCurrentUser().first()?.let { user ->
@@ -75,7 +76,7 @@ class SecretRepository(
         // Initialize Libsodium
         LibsodiumInitializer.initialize()
 
-        val keyPair = getKeyPair().firstOrNull()
+        val keyPair = secretLocalDataSource.getSecret().firstOrNull()
             ?: throw IllegalStateException("No key pair found")
 
         return Box.seal(
@@ -88,7 +89,7 @@ class SecretRepository(
         // Initialize Libsodium
         LibsodiumInitializer.initialize()
 
-        val keyPair = getKeyPair().firstOrNull()
+        val keyPair = secretLocalDataSource.getSecret().firstOrNull()
             ?: throw IllegalStateException("No key pair found")
 
         return Box.sealOpen(

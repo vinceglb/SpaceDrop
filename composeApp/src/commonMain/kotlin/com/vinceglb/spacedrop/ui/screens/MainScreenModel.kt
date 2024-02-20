@@ -21,11 +21,11 @@ class MainScreenModel(
         authRepository.getCurrentUser(),
         deviceRepository.getCurrentDevice(),
         eventRepository.getNotificationEventId(),
-        secretRepository.getKeyPair(),
-    ) { currentUser, currentDevice, notificationEventId, keyPair ->
+        secretRepository.hasSecret(),
+    ) { currentUser, currentDevice, notificationEventId, hasSecret ->
         MainState.Success(
             isLogged = currentUser != null,
-            hasSecret = keyPair != null,
+            hasSecret = hasSecret,
             isRegistered = currentDevice != null,
             notificationEventId = notificationEventId,
         )

@@ -70,13 +70,15 @@ class EventRepository(
 
     suspend fun executeEvents() {
         val deviceEvents = deviceEvents.firstOrNull()
-        Logger.i(TAG) { "executeEvents() ${deviceEvents?.size}" }
+        Logger.i(TAG) { "executeEvents() $deviceEvents" }
         deviceEvents?.forEach { event -> executeEvent(event) }
     }
 
     suspend fun sendNotificationEvent(destinationDeviceId: String) {
         val currentDeviceId = deviceLocalDataSource.getDeviceId().firstOrNull()
             ?: throw IllegalStateException("No device ID found")
+
+        Logger.i(TAG) { "sendNotificationEvent() currentDeviceId = $currentDeviceId, destinationDeviceId = $destinationDeviceId" }
 
         eventRemoteDataSource.createEvent(
             PingEventCreateRequest(
@@ -140,10 +142,12 @@ class EventRepository(
             // Execute event
             when (event) {
                 is PingEvent -> message.emit("Ping!")
+
                 is TextEvent -> {
                     val decryptedMessage = secretRepository.decryptMessage(event.text)
                     platformActionDataSource.copyToClipboard(decryptedMessage)
                 }
+
                 is UrlEvent -> {
                     val decryptedUrl = secretRepository.decryptMessage(event.url)
                     platformActionDataSource.openUrl(decryptedUrl)
