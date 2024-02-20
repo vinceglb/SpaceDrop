@@ -13,6 +13,7 @@ compose-plugin = "1.6.0-rc02"
 conveyor = "1.8"
 firebase-bom = "32.7.2"
 google-services = "4.4.1"
+humanReadable = "1.2.0"
 kermit = "2.0.3"
 kmmViewmodel = "1.0.0-ALPHA-15"
 koin = "3.5.3"
@@ -40,6 +41,7 @@ compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview"
 firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
 firebase-messaging-ktx = { module = "com.google.firebase:firebase-messaging-ktx" }
+humanReadable = { module = "nl.jacobras:human-readable", version.ref = "humanReadable" }
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 kermit-koin = { module = "co.touchlab:kermit-koin", version.ref = "kermit" }
 kmm-viewmodel = { module = "com.rickclephas.kmm:kmm-viewmodel-core", version.ref = "kmmViewmodel" }

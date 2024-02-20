@@ -54,6 +54,9 @@ kotlin {
 
             // File picker
             implementation(libs.mpFilePicker)
+
+            // Human readable duration
+            implementation(libs.humanReadable)
         }
 
         androidMain.dependencies {

@@ -38,6 +38,7 @@ import com.vinceglb.spacedrop.model.Device
 import com.vinceglb.spacedrop.ui.components.PlatformIcon
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
+import nl.jacobras.humanreadable.HumanReadable
 
 @Composable
 fun ManageDevices(
@@ -125,7 +126,8 @@ private fun DeviceItem(
             val lastSeenStr = remember(device.lastSeen) {
                 when (isCurrent) {
                     true -> ""
-                    else -> "· Last seen ${getTimeElapsedDescription(device.lastSeen)}"
+                    else -> "· ${HumanReadable.timeAgo(device.lastSeen)
+                        .replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }}"
                 }
             }
 
