@@ -24,13 +24,13 @@ kotlin {
     androidTarget {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "21"
+                jvmTarget = "17"
             }
         }
     }
     
     jvm()
-    jvmToolchain(21)
+    jvmToolchain(17)
     
     sourceSets {
         commonMain.dependencies {

@@ -13,13 +13,13 @@ kotlin {
     androidTarget {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "21"
+                jvmTarget = "17"
             }
         }
     }
 
     jvm(/*"desktop"*/)
-    jvmToolchain(21)
+    jvmToolchain(17)
 
     listOf(
         iosX64(),
@@ -131,8 +131,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     dependencies {
