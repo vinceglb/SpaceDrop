@@ -87,7 +87,7 @@ struct iOSComposeApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                    .onOpenURL(perform: handleDeepLink)
+                .onOpenURL(perform: handleDeepLink)
         }
     }
 

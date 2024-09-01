@@ -20,7 +20,7 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     androidTarget {
         compilations.all {
             kotlinOptions {
@@ -28,10 +28,10 @@ kotlin {
             }
         }
     }
-    
+
     jvm()
     jvmToolchain(17)
-    
+
     sourceSets {
         commonMain.dependencies {
             // Kotlin
@@ -125,17 +125,17 @@ buildkonfig {
         buildConfigField(
             STRING,
             "SupabaseUrl",
-            gradleLocalProperties(project.rootDir).getProperty("SUPABASE_URL")
+            gradleLocalProperties(rootDir, providers).getProperty("SUPABASE_URL")
         )
         buildConfigField(
             STRING,
             "SupabaseKey",
-            gradleLocalProperties(project.rootDir).getProperty("SUPABASE_KEY")
+            gradleLocalProperties(rootDir, providers).getProperty("SUPABASE_KEY")
         )
         buildConfigField(
             STRING,
             "GoogleClientId",
-            gradleLocalProperties(project.rootDir).getProperty("GOOGLE_CLIENT_ID")
+            gradleLocalProperties(rootDir, providers).getProperty("GOOGLE_CLIENT_ID")
         )
     }
 }

@@ -44,6 +44,7 @@ kotlin {
             implementation(compose.material3)
             implementation(compose.ui)
             implementation(compose.components.resources)
+            // implementation(compose.components.uiToolingPreview)
 
             // Koin
             implementation(libs.koin.compose)
@@ -82,6 +83,7 @@ kotlin {
 
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
+            implementation(libs.auto.launch)
         }
 
         targets.all {

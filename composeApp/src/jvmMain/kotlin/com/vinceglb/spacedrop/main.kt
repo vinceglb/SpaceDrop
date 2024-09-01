@@ -4,6 +4,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.window.Notification
 import androidx.compose.ui.window.Tray
@@ -11,17 +12,21 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberTrayState
 import androidx.compose.ui.window.rememberWindowState
+import co.touchlab.kermit.Logger
 import com.vinceglb.spacedrop.composeapp.generated.resources.Res
 import com.vinceglb.spacedrop.composeapp.generated.resources.tray_icon
 import com.vinceglb.spacedrop.di.composeModule
 import com.vinceglb.spacedrop.di.composePlatformModule
 import com.vinceglb.spacedrop.di.desktopModule
 import com.vinceglb.spacedrop.di.startAppKoin
+import io.github.vinceglb.autolaunch.AutoLaunch
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.KoinApplication
 import java.awt.Window
+import java.io.File
 
 @OptIn(ExperimentalResourceApi::class)
 fun main() = application {
@@ -36,6 +41,18 @@ fun main() = application {
             trayState.sendNotification(Notification(title = title, message = message))
         }
     }
+    val autoLaunch = remember {
+        AutoLaunch(appPackageName = "com.vinceglb.spacedrop")
+    }
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        println(System.getProperty("java.vm.name"));
+        println(System.getProperty("java.home"));
+        println(System.getProperty("java.vendor"));
+        println(System.getProperty("java.version"));
+        println(System.getProperty("java.specification.vendor"));
+    }
 
     Tray(
         state = trayState,
@@ -47,6 +64,19 @@ fun main() = application {
                     isWindowVisible = true
                     focus = true
                 },
+            )
+
+            Item(
+                "Auto Launch",
+                onClick = {
+                    scope.launch {
+                        if (autoLaunch.isEnabled()) {
+                            autoLaunch.disable()
+                        } else {
+                            autoLaunch.enable()
+                        }
+                    }
+                }
             )
 
             Item(
@@ -93,6 +123,16 @@ fun main() = application {
             delay(1200)
             focus = false
         }
+    }
+
+    LaunchedEffect(Unit) {
+        val ownExecutable = File(ProcessHandle.current().info().command().get())
+
+        val isRunningFromDistributable: Boolean =
+            ownExecutable.nameWithoutExtension != "java"
+
+        Logger.d("Own executable: $ownExecutable")
+        Logger.d("Running from distributable: $isRunningFromDistributable")
     }
 
 //    LaunchedEffect(Unit) {

@@ -1,5 +1,6 @@
 package com.vinceglb.spacedrop.ui.screens.home
 
+import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,7 +37,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
+import com.vinceglb.spacedrop.model.Device
+import com.vinceglb.spacedrop.model.Platform
 import com.vinceglb.spacedrop.ui.screens.home.components.ManageDevices
+import com.vinceglb.spacedrop.ui.theme.SpaceDropTheme
+import kotlinx.datetime.Clock
+import kotlin.time.Duration.Companion.hours
 
 object HomeScreen : Screen {
     @Composable
@@ -112,6 +118,7 @@ private fun HomeScreen(
                         text = "Manage your devices",
                         style = MaterialTheme.typography.titleLarge,
                         textAlign = TextAlign.Center,
+
                     )
                     Text(
                         text = "You can manage your devices here.",
@@ -149,3 +156,50 @@ private fun HomeScreen(
         }
     }
 }
+
+@Preview
+@Composable
+private fun HomeScreenPreview() {
+    SpaceDropTheme {
+        HomeScreen(
+            uiState = HomeScreenUiState(
+                devices = previewDevices,
+            ),
+            onSignOut = {},
+            onRenameDevice = { _, _ -> },
+            onDeleteDevice = {},
+            onSendNotification = { _, _ -> },
+            onConsumeMessage = {},
+        )
+    }
+}
+
+internal val previewDevices = listOf(
+    Device(
+        id = "1",
+        name = "Vince's iPhone",
+        platform = Platform.IOS,
+        lastSeen = Clock.System.now(),
+        createdAt = Clock.System.now(),
+        fcmToken = "fcmToken",
+        userId = "userId",
+    ),
+    Device(
+        id = "2",
+        name = "Vince's Mac",
+        platform = Platform.MacOS,
+        lastSeen = Clock.System.now() - 4.hours,
+        createdAt = Clock.System.now() - 6.hours,
+        userId = "userId",
+        fcmToken = "fcmToken",
+    ),
+    Device(
+        id = "3",
+        name = "Vince's Windows",
+        platform = Platform.Windows,
+        lastSeen = Clock.System.now() - 1.hours,
+        createdAt = Clock.System.now() - 2.hours,
+        userId = "userId",
+        fcmToken = null
+    ),
+)
