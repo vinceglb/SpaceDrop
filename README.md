@@ -1,3 +1,8 @@
+## Work in progress
+
+The latest work-in-progress changes are available on the [`wip` branch](https://github.com/vinceglb/SpaceDrop/tree/wip).
+See [PR #42](https://github.com/vinceglb/SpaceDrop/pull/42) for the original changes and discussion history, preserved after merging into `wip`.
+
 This is a Kotlin Multiplatform project targeting Android, iOS, Desktop.
 
 * `/shared` is for the code that will be shared between all targets in the project.
