@@ -1,10 +1,13 @@
 package com.vinceglb.spacedrop.ui.screens.home.components
 
+import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -36,8 +39,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.vinceglb.spacedrop.model.Device
 import com.vinceglb.spacedrop.ui.components.PlatformIcon
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
+import com.vinceglb.spacedrop.ui.screens.home.previewDevices
+import com.vinceglb.spacedrop.ui.theme.SpaceDropTheme
 import nl.jacobras.humanreadable.HumanReadable
 
 @Composable
@@ -126,8 +129,10 @@ private fun DeviceItem(
             val lastSeenStr = remember(device.lastSeen) {
                 when (isCurrent) {
                     true -> ""
-                    else -> "· ${HumanReadable.timeAgo(device.lastSeen)
-                        .replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }}"
+                    else -> "· ${
+                        HumanReadable.timeAgo(device.lastSeen)
+                            .replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+                    }"
                 }
             }
 
@@ -224,18 +229,26 @@ private fun DeviceItem(
     }
 }
 
-fun getTimeElapsedDescription(instant: Instant): String {
-    val currentInstant = Clock.System.now()
-    val duration = currentInstant - instant
-
-    val minutes = duration.inWholeMinutes
-    val hours = duration.inWholeHours
-    val days = duration.inWholeDays
-
-    return when {
-        days > 0 -> "$days ${if (days > 1) "days" else "day"} ago"
-        hours > 0 -> "$hours ${if (hours > 1) "hours" else "hour"} ago"
-        minutes > 0 -> "$minutes ${if (minutes > 1) "minutes" else "minute"} ago"
-        else -> "now"
+@Preview
+@Composable
+private fun ManageDevicesPreview() {
+    val devices = previewDevices
+    SpaceDropTheme {
+        Surface {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp),
+            ) {
+                ManageDevices(
+                    devices = devices,
+                    currentDevice = devices.first(),
+                    onRenameDevice = { _, _ -> },
+                    onDeleteDevice = { },
+                    onSendNotification = { },
+                )
+            }
+        }
     }
 }

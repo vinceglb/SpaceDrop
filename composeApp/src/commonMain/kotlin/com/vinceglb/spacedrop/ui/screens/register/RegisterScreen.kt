@@ -1,5 +1,6 @@
 package com.vinceglb.spacedrop.ui.screens.register
 
+import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Spacer
@@ -21,12 +22,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import com.vinceglb.spacedrop.ui.components.OnboardingHeader
 import com.vinceglb.spacedrop.ui.components.OnboardingLayout
 import com.vinceglb.spacedrop.ui.components.PlatformIcon
+import com.vinceglb.spacedrop.ui.theme.SpaceDropTheme
 import com.vinceglb.spacedrop.util.currentPlatform
 
 object RegisterScreen : Screen {
@@ -60,7 +63,13 @@ private fun RegisterScreen(
             TextField(
                 value = deviceName,
                 onValueChange = { deviceName = it },
-                label = { Text("Device Name") },
+                label = {
+                    Text(
+                        text = "Device Name",
+                        overflow = TextOverflow.Ellipsis,
+                        softWrap = false
+                    )
+                },
                 trailingIcon = {
                     PlatformIcon(platform = currentPlatform)
                 },
@@ -80,14 +89,37 @@ private fun RegisterScreen(
             }
 
             if (uiState.error != null) {
-                Spacer(modifier = Modifier.size(2.dp))
+                Spacer(modifier = Modifier.size(4.dp))
                 Text(
                     uiState.error,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.error,
                     textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }
+    }
+}
+
+@Preview
+@Composable
+fun RegisterScreenPreview() {
+    SpaceDropTheme {
+        RegisterScreen(
+            uiState = RegisterScreenUiState(),
+            onRegisterDevice = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+fun RegisterScreenPreviewError() {
+    SpaceDropTheme {
+        RegisterScreen(
+            uiState = RegisterScreenUiState(error = "My bad"),
+            onRegisterDevice = {}
+        )
     }
 }
